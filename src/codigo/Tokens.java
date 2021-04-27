@@ -39,5 +39,11 @@ public enum Tokens {
     P_coma,
     Identificador,
     Numero,
+    Elif,
+    Read,
+    Write,
+    Fun,
+    Break,
+    Return,
     ERROR
 }

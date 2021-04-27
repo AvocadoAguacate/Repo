@@ -131,6 +131,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 case Numero:
                     resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
                     break;
+                case Elif:
+                    resultado += "  <Elif>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Read:
+                    resultado += "  <Read>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Write:
+                    resultado += "  <Write>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Fun:
+                    resultado += "  <Fun>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Break:
+                    resultado += "  <Break>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Return:
+                    resultado += "  <Return>\t\t" + lexer.lexeme + "\n";
+                    break;
                 case ERROR:
                     resultado += "  <Simbolo no definido>\n";
                     break;
