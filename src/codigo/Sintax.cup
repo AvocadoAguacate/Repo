@@ -20,17 +20,17 @@ terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
     Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, 
-    Op_Sino, Read, Write;
+    Op_Sino, Read, Write, Fun;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL, ARREGLOE,
     VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF, 
-    IFARIT, WRITE;
+    IFARIT, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES;
 
 start with INICIO;
 
 INICIO ::= 
     Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
-    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+    Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c FUNCIONES
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
@@ -56,12 +56,36 @@ SENTENCIA ::=
     SENTENCIA Return VALBOOL P_coma |
     Return VALBOOL P_coma |
     SENTENCIA WRITE |
-    WRITE
+    WRITE |
+    SENTENCIA FUNCION_D |
+    FUNCION_D
 ;
 
 FUNCION_E ::=
     Identificador Parentesis_a Parentesis_c |
     Identificador Parentesis_a VARIABLES Parentesis_c
+;
+
+FUNCION_D ::= 
+    Fun Parentesis_a Identificador Int Parentesis_c Llave_a SENTENCIA Llave_c |
+    Fun Parentesis_a Identificador T_dato Parentesis_c Llave_a SENTENCIA Llave_c |
+    Fun Parentesis_a Identificador Int FUNVARS Parentesis_c Llave_a SENTENCIA Llave_c |
+    Fun Parentesis_a Identificador T_dato FUNVARS Parentesis_c Llave_a SENTENCIA Llave_c
+;
+
+FUNVAR ::=
+    Int Identificador |
+    T_dato Identificador
+;
+
+FUNVARS ::=
+    FUNVARS FUNVAR |
+    FUNVAR
+;
+
+FUNCIONES ::=
+    FUNCIONES FUNCION_D |
+    FUNCION_D
 ;
 
 DECLARACION ::= 
@@ -162,6 +186,7 @@ VALBOOL ::=
     Comillas Comillas |
     Comillas Identificador Comillas
 ;
+
 IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
 ;
 

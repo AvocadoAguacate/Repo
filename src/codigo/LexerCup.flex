@@ -44,6 +44,9 @@ espacio=[ ,\t,\r,\n]+
 /* Palabra reservada Read */
 ( read ) {return new Symbol(sym.Read, yychar, yyline, yytext());}
 
+/* Palabra reservada Fun */
+( fun ) {return new Symbol(sym.Fun, yychar, yyline, yytext());}
+
 /* Palabra reservada If */
 ( if ) {return new Symbol(sym.If, yychar, yyline, yytext());}
 
