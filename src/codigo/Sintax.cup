@@ -19,7 +19,7 @@ terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
-    Numero, ERROR;
+    Numero, ERROR, Op_diferencia;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL;
 
@@ -62,8 +62,12 @@ DECLARACION ::=
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;
 SENTENCIA_BOOLEANA ::= 
-    VALBOOL | 
-    VALBOOL Op_relacional VALBOOL 
+    Op_booleano |
+    Op_booleano Op_diferencia |
+    Identificador Op_diferencia |
+    VALBOOL Op_relacional VALBOOL |
+    SENTENCIA_BOOLEANA Op_logico VALBOOL |
+    SENTENCIA_BOOLEANA Op_logico VALBOOL Op_relacional VALBOOL
 ;
 VALBOOL ::=
     Op_booleano |

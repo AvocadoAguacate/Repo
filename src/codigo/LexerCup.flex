@@ -68,8 +68,11 @@ espacio=[ ,\t,\r,\n]+
 /* Operador Division */
 ( "/" ) {return new Symbol(sym.Division, yychar, yyline, yytext());}
 
+/* Diferencia Operador */
+( "!" ) {return new Symbol(sym.Op_diferencia, yychar, yyline, yytext());}
+
 /* Operadores logicos */
-( "&&" | "||" | "!" | "&" | "|" ) {return new Symbol(sym.Op_logico, yychar, yyline, yytext());}
+( "&&" | "||" ) {return new Symbol(sym.Op_logico, yychar, yyline, yytext());}
 
 /*Operadores Relacionales */
 ( ">" | "<" | "==" | "!=" | ">=" | "<=" | "<<" | ">>" ) {return new Symbol(sym.Op_relacional, yychar, yyline, yytext());}
