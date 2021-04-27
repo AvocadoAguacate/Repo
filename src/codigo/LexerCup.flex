@@ -68,6 +68,9 @@ espacio=[ ,\t,\r,\n]+
 /* Operador Division */
 ( "/" ) {return new Symbol(sym.Division, yychar, yyline, yytext());}
 
+/* Operador Division */
+( "^" ) {return new Symbol(sym.Potencia, yychar, yyline, yytext());}
+
 /* Diferencia Operador */
 ( "!" ) {return new Symbol(sym.Op_diferencia, yychar, yyline, yytext());}
 

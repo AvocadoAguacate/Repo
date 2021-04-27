@@ -19,7 +19,7 @@ terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
-    Numero, ERROR, Op_diferencia;
+    Numero, ERROR, Op_diferencia, Potencia;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL, ARREGLOE,
     VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION;
@@ -100,16 +100,19 @@ EXPRESION ::=
     EXPRESION Resta VAR |
     EXPRESION Multiplicacion VAR |
     EXPRESION Division VAR |
+    EXPRESION Potencia VAR |
     VAR Suma VAR |
     VAR Resta VAR |
     VAR Multiplicacion VAR |
-    VAR Division VAR
+    VAR Division VAR |
+    VAR Potencia VAR 
 ;
 
 VAR ::= 
     Numero |
     Identificador |
     FUNCION_E |
+    Parentesis_a EXPRESION Parentesis_c |
     Parentesis_a VAR Parentesis_c
 ;
 
