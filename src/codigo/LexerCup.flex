@@ -38,6 +38,12 @@ espacio=[ ,\t,\r,\n]+
 /* Tipo de dato String */
 ( String ) {return new Symbol(sym.Cadena, yychar, yyline, yytext());}
 
+/* Palabra reservada Write */
+( write ) {return new Symbol(sym.Write, yychar, yyline, yytext());}
+
+/* Palabra reservada Read */
+( read ) {return new Symbol(sym.Read, yychar, yyline, yytext());}
+
 /* Palabra reservada If */
 ( if ) {return new Symbol(sym.If, yychar, yyline, yytext());}
 
