@@ -29,11 +29,29 @@ espacio=[ ,\t,\r]+
 /* Tipo de dato String */
 ( String ) {lexeme=yytext(); return Cadena;}
 
+/* Palabra reservada Write */
+( write ) {lexeme=yytext(); return Write;}
+
+/* Palabra reservada Read */
+( read ) {lexeme=yytext(); return Read;}
+
+/* Palabra reservada Fun */
+( fun ) {lexeme=yytext(); return Fun;}
+
 /* Palabra reservada If */
 ( if ) {lexeme=yytext(); return If;}
 
+/* Palabra reservada Elif */
+( elif ) {lexeme=yytext(); return Elif;}
+
 /* Palabra reservada Else */
 ( else ) {lexeme=yytext(); return Else;}
+
+/* Palabra reservada Break */
+( break ) {lexeme=yytext(); return Break;}
+
+/* Palabra reservada Return */
+( return ) {lexeme=yytext(); return Return;}
 
 /* Palabra reservada Do */
 ( do ) {lexeme=yytext(); return Do;}
