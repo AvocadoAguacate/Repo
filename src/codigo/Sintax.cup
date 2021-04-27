@@ -21,7 +21,8 @@ terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
     Numero, ERROR, Op_diferencia;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL;
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL, ARREGLOE,
+    VARIABLES, EXPRESION, VAR;
 
 start with INICIO;
 
@@ -57,8 +58,43 @@ DECLARACION ::=
     Cadena Identificador Op_atribucion Comillas Comillas P_coma |
     Cadena Identificador Igual Comillas Comillas P_coma |
     Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
-    Cadena Identificador Igual Comillas Identificador Comillas P_coma
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
+    T_dato Identificador Corchete_a Numero Corchete_c P_coma |
+    T_dato Identificador Corchete_a Corchete_c P_coma |
+    T_dato Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
+    T_dato Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
+    Int Identificador Corchete_a Numero Corchete_c P_coma |
+    Int Identificador Corchete_a Corchete_c P_coma |
+    Int Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
+    Int Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
+    Int Identificador Igual EXPRESION P_coma |
+    T_dato Identificador Igual EXPRESION P_coma
 ;
+
+EXPRESION ::=
+    EXPRESION Suma VAR |
+    EXPRESION Resta VAR |
+    EXPRESION Multiplicacion VAR |
+    EXPRESION Division VAR |
+    VAR Suma VAR |
+    VAR Resta VAR |
+    VAR Multiplicacion VAR |
+    VAR Division VAR
+;
+
+VAR ::= 
+    Numero |
+    Identificador |
+    Parentesis_a VAR Parentesis_c
+;
+
+ARREGLOE ::= Llave_a VARIABLES Llave_c
+;
+
+VARIABLES ::= VALBOOL |
+    VARIABLES VALBOOL
+;
+
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;
 SENTENCIA_BOOLEANA ::= 
