@@ -19,10 +19,10 @@ terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
-    Numero, ERROR, Op_diferencia, Potencia;
+    Numero, ERROR, Op_diferencia, Potencia, Elif;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL, ARREGLOE,
-    VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION;
+    VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF;
 
 start with INICIO;
 
@@ -46,7 +46,9 @@ SENTENCIA ::=
     SENTENCIA FUNCION_E |
     FUNCION_E |
     SENTENCIA ASIGNACION |
-    ASIGNACION
+    ASIGNACION |
+    SENTENCIA IF_ELIF_ELSE |
+    IF_ELIF_ELSE
 ;
 
 FUNCION_E ::=
@@ -141,6 +143,16 @@ VALBOOL ::=
     Comillas Identificador Comillas
 ;
 IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
+;
+
+ELIF ::=
+    Elif Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c |
+    ELIF Elif Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+
+IF_ELIF_ELSE ::= 
+    IF ELIF |
+    IF ELIF Else Llave_a SENTENCIA Llave_c
 ;
 WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;

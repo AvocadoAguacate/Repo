@@ -41,6 +41,9 @@ espacio=[ ,\t,\r,\n]+
 /* Palabra reservada If */
 ( if ) {return new Symbol(sym.If, yychar, yyline, yytext());}
 
+/* Palabra reservada If */
+( elif ) {return new Symbol(sym.Elif, yychar, yyline, yytext());}
+
 /* Palabra reservada Else */
 ( else ) {return new Symbol(sym.Else, yychar, yyline, yytext());}
 
