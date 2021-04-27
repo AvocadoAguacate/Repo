@@ -47,6 +47,12 @@ espacio=[ ,\t,\r,\n]+
 /* Palabra reservada Else */
 ( else ) {return new Symbol(sym.Else, yychar, yyline, yytext());}
 
+/* Palabra reservada Break */
+( break ) {return new Symbol(sym.Break, yychar, yyline, yytext());}
+
+/* Palabra reservada Return */
+( return ) {return new Symbol(sym.Return, yychar, yyline, yytext());}
+
 /* Palabra reservada Do */
 ( do ) {return new Symbol(sym.Do, yychar, yyline, yytext());}
 
@@ -77,6 +83,11 @@ espacio=[ ,\t,\r,\n]+
 /* Diferencia Operador */
 ( "!" ) {return new Symbol(sym.Op_diferencia, yychar, yyline, yytext());}
 
+/* Pregunta Operador */
+( "?" ) {return new Symbol(sym.Op_pregunta, yychar, yyline, yytext());}
+
+/* Sino Operador */
+( ":" ) {return new Symbol(sym.Op_Sino, yychar, yyline, yytext());}
 /* Operadores logicos */
 ( "&&" | "||" ) {return new Symbol(sym.Op_logico, yychar, yyline, yytext());}
 

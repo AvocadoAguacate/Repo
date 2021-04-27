@@ -19,10 +19,10 @@ terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
-    Numero, ERROR, Op_diferencia, Potencia, Elif;
+    Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, Op_Sino;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL, ARREGLOE,
-    VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF;
+    VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF, IFARIT;
 
 start with INICIO;
 
@@ -48,7 +48,11 @@ SENTENCIA ::=
     SENTENCIA ASIGNACION |
     ASIGNACION |
     SENTENCIA IF_ELIF_ELSE |
-    IF_ELIF_ELSE
+    IF_ELIF_ELSE |
+    SENTENCIA Break P_coma |
+    Break P_coma |
+    SENTENCIA Return VALBOOL P_coma |
+    Return VALBOOL P_coma
 ;
 
 FUNCION_E ::=
@@ -107,7 +111,8 @@ EXPRESION ::=
     VAR Resta VAR |
     VAR Multiplicacion VAR |
     VAR Division VAR |
-    VAR Potencia VAR 
+    VAR Potencia VAR |
+    IFARIT
 ;
 
 VAR ::= 
@@ -115,7 +120,7 @@ VAR ::=
     Identificador |
     FUNCION_E |
     Parentesis_a EXPRESION Parentesis_c |
-    Parentesis_a VAR Parentesis_c
+    Parentesis_a VAR Parentesis_c |
 ;
 
 ARREGLOE ::= Llave_a VARIABLES Llave_c
@@ -126,6 +131,10 @@ VARIABLES ::= VALBOOL |
 ;
 
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+
+IFARIT ::= 
+    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR Op_Sino VAR
 ;
 SENTENCIA_BOOLEANA ::= 
     Op_booleano |
