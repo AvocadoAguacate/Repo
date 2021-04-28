@@ -112,7 +112,9 @@ DECLARACION ::=
     Int Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
     Int Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
     Int Identificador Igual EXPRESION P_coma |
-    T_dato Identificador Igual EXPRESION P_coma
+    T_dato Identificador Igual EXPRESION P_coma |
+    Int Identificador Igual FUNCION_E P_coma |
+    T_dato Identificador Igual FUNCION_E P_coma
 ;
 
 ASIGNACION ::=  
@@ -127,7 +129,8 @@ ASIGNACION ::=
     Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
     Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
     Identificador Igual EXPRESION P_coma |
-    Identificador Igual Read Parentesis_a Parentesis_c P_coma
+    Identificador Igual Read Parentesis_a Parentesis_c P_coma |
+    Identificador Igual FUNCION_E P_coma
 ;
 
 EXPRESION ::=
