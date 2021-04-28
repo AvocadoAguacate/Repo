@@ -114,7 +114,9 @@ DECLARACION ::=
     Int Identificador Igual EXPRESION P_coma |
     T_dato Identificador Igual EXPRESION P_coma |
     Int Identificador Igual FUNCION_E P_coma |
-    T_dato Identificador Igual FUNCION_E P_coma
+    T_dato Identificador Igual FUNCION_E P_coma |
+    T_dato Identificador Igual Identificador |
+    Int Identificador Igual Identificador
 ;
 
 ASIGNACION ::=  
@@ -130,7 +132,8 @@ ASIGNACION ::=
     Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
     Identificador Igual EXPRESION P_coma |
     Identificador Igual Read Parentesis_a Parentesis_c P_coma |
-    Identificador Igual FUNCION_E P_coma
+    Identificador Igual FUNCION_E P_coma |
+    Identificador Igual Identificador P_coma
 ;
 
 EXPRESION ::=
