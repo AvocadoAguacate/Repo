@@ -16,15 +16,16 @@ parser code
 :};
 
 terminal Linea, Comillas, T_dato, Int, Float, Bool, Cadena, If, Else, Do, While, For,
-    Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
-    Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
-    Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
+    Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_cantidad,
+    Op_igualdad, Op_atribucion, Op_incremento, Op_booleano, Parentesis_a,
+    Parentesis_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
     Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, 
     Op_Sino, Read, Write, Fun;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VALBOOL, ARREGLOE,
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, ARREGLOE,
     VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF, 
-    IFARIT, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL;
+    IFARIT, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
+    VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO;
 
 start with INICIO;
 
@@ -53,8 +54,8 @@ SENTENCIA ::=
     IF_ELIF_ELSE |
     SENTENCIA Break P_coma |
     Break P_coma |
-    SENTENCIA Return VALBOOL P_coma |
-    Return VALBOOL P_coma |
+    SENTENCIA Return VALBOOLIGUALDAD P_coma |
+    Return VALBOOLIGUALDAD P_coma |
     SENTENCIA WRITE |
     WRITE |
     SENTENCIA FUNCION_D |
@@ -90,7 +91,8 @@ FUNCIONES ::=
 
 DECLARACION_BOOL ::=
     Bool Identificador P_coma |
-    Bool Identificador Igual SENTENCIA_BOOLEANA P_coma
+    Bool Identificador Igual SENTENCIA_BOOLEANA P_coma |
+    Bool Identificador Igual Identificador P_coma
 ;
 
 DECLARACION ::= 
@@ -121,7 +123,8 @@ DECLARACION ::=
     Int Identificador Igual FUNCION_E P_coma |
     T_dato Identificador Igual FUNCION_E P_coma |
     T_dato Identificador Igual Identificador |
-    Int Identificador Igual Identificador
+    Int Identificador Igual Identificador |
+    DECLARACION_BOOL
 ;
 
 ASIGNACION ::=  
@@ -165,9 +168,9 @@ VAR ::=
 
 ARREGLOE ::= Llave_a VARIABLES Llave_c
 ;
-
-VARIABLES ::= VALBOOL |
-    VARIABLES VALBOOL
+//hay que validar variables iguales en los arreglos
+VARIABLES ::= VALBOOLIGUALDAD |
+    VARIABLES VALBOOLIGUALDAD
 ;
 
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
@@ -182,20 +185,27 @@ WRITE ::=
     Write Parentesis_a EXPRESION Parentesis_c P_coma
 ;
 
+//identificador solitario no quiere agregarse, está en declaración boleana
 SENTENCIA_BOOLEANA ::= 
     Op_booleano |
-    Op_booleano Op_diferencia |
+    VALBOOLLOGICO Op_diferencia |
     Identificador Op_diferencia |
-    VALBOOL Op_relacional VALBOOL |
-    SENTENCIA_BOOLEANA Op_logico VALBOOL |
-    SENTENCIA_BOOLEANA Op_logico VALBOOL Op_relacional VALBOOL
+    VALBOOLCANTIDAD Op_cantidad VALBOOLCANTIDAD |
+    VALBOOLIGUALDAD Op_igualdad VALBOOLIGUALDAD |
+    SENTENCIA_BOOLEANA Op_logico Op_booleano |
+    SENTENCIA_BOOLEANA Op_logico Identificador |
+    SENTENCIA_BOOLEANA Op_logico VALBOOLCANTIDAD Op_cantidad VALBOOLCANTIDAD |
+    SENTENCIA_BOOLEANA Op_logico VALBOOLIGUALDAD Op_igualdad VALBOOLIGUALDAD
 ;
-VALBOOL ::=
-    Op_booleano |
+VALBOOLCANTIDAD ::=
+    Numero |
+    Identificador 
+;
+
+VALBOOLIGUALDAD::=
     Numero |
     Identificador |
-    Comillas Comillas |
-    Comillas Identificador Comillas
+    Op_booleano
 ;
 
 IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c

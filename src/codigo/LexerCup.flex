@@ -107,7 +107,10 @@ espacio=[ ,\t,\r,\n]+
 ( "&&" | "||" ) {return new Symbol(sym.Op_logico, yychar, yyline, yytext());}
 
 /*Operadores Relacionales */
-( ">" | "<" | "==" | "!=" | ">=" | "<=" | "<<" | ">>" ) {return new Symbol(sym.Op_relacional, yychar, yyline, yytext());}
+( "==" | "!=" ) {return new Symbol(sym.Op_igualdad, yychar, yyline, yytext());}
+
+/*Operadores Relacionales */
+( ">" | "<" | ">=" | "<=" ) {return new Symbol(sym.Op_cantidad, yychar, yyline, yytext());}
 
 /* Operadores Atribucion */
 ( "+=" | "-="  | "*=" | "/=" | "%=" | "=" ) {return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
