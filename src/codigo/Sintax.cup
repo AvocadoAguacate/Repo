@@ -26,7 +26,7 @@ non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF, 
     IFARIT, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
-    EXPRESION_FLOTANTE;
+    EXPRESION_FLOTANTE, VAR_FLOTANTE;
 
 start with INICIO;
 
@@ -98,12 +98,25 @@ DECLARACION_BOOL ::=
 
 DECLARACION_FLOTANTE ::=
     Float Identificador P_coma |
-    Float Identificador Igual Flotante P_coma |
     Float Identificador Igual EXPRESION_FLOTANTE P_coma
 ;
 
+//Hay que revisar que IFRIT devuelva un flotante
 EXPRESION_FLOTANTE ::=
-    EXPRESION
+    EXPRESION_FLOTANTE Suma VAR_FLOTANTE |
+    EXPRESION_FLOTANTE Resta VAR_FLOTANTE   |
+    EXPRESION_FLOTANTE Multiplicacion VAR_FLOTANTE |
+    EXPRESION_FLOTANTE Division VAR_FLOTANTE |
+    EXPRESION_FLOTANTE Potencia  VAR_FLOTANTE |
+    VAR_FLOTANTE 
+;
+
+//Hay que revisar que VAR devuelvan un flotante con la tabla de simbolos
+VAR_FLOTANTE ::=
+    Flotante |
+    Identificador |
+    IFARIT |
+    Parentesis_a EXPRESION_FLOTANTE Parentesis_c 
 ;
 
 DECLARACION ::= 
@@ -171,11 +184,8 @@ EXPRESION ::=
 ;
 
 VAR ::= 
-    Numero |
     Identificador |
-    FUNCION_E |
-    Parentesis_a EXPRESION Parentesis_c |
-    Parentesis_a VAR Parentesis_c |
+    FUNCION_E 
 ;
 
 ARREGLOE ::= Llave_a VARIABLES Llave_c
