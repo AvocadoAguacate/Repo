@@ -8,6 +8,7 @@ package codigo;
 /**
  *
  * @author Charly Ponce
+ * @edit Esteban Guzmán R
  */
 public enum Tokens {
     Linea,
