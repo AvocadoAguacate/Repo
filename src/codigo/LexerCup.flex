@@ -149,7 +149,10 @@ espacio=[ ,\t,\r,\n]+
 {L}({L}|{D})* {return new Symbol(sym.Identificador, yychar, yyline, yytext());}
 
 /* Numero */
-("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
+("-"{D}+)|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
+
+/* Flotante */
+("-"{D}+ "." {D}+ )|{D}+ "." {D}+ {return new Symbol(sym.Flotante, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}

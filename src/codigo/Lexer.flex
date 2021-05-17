@@ -120,7 +120,10 @@ espacio=[ ,\t,\r]+
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
 
 /* Numero */
-("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
+("-"{D}+)|{D}+ {lexeme=yytext(); return Numero;}
+
+/* Flotante */
+("-"{D}+ "." {D}+ )|{D}+ "." {D}+ {lexeme=yytext(); return Flotante;}
 
 /* Error de analisis */
  . {return ERROR;}

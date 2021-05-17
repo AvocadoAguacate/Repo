@@ -20,12 +20,13 @@ terminal Linea, Comillas, T_dato, Int, Float, Bool, Cadena, If, Else, Do, While,
     Op_igualdad, Op_atribucion, Op_incremento, Op_booleano, Parentesis_a,
     Parentesis_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
     Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, 
-    Op_Sino, Read, Write, Fun;
+    Op_Sino, Read, Write, Fun, Flotante;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, ARREGLOE,
     VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF, 
     IFARIT, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
-    VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO;
+    VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
+    EXPRESION_FLOTANTE;
 
 start with INICIO;
 
@@ -95,6 +96,16 @@ DECLARACION_BOOL ::=
     Bool Identificador Igual Identificador P_coma
 ;
 
+DECLARACION_FLOTANTE ::=
+    Float Identificador P_coma |
+    Float Identificador Igual Flotante P_coma |
+    Float Identificador Igual EXPRESION_FLOTANTE P_coma
+;
+
+EXPRESION_FLOTANTE ::=
+    EXPRESION
+;
+
 DECLARACION ::= 
     Int Identificador P_coma | 
     Int Identificador Op_atribucion Numero P_coma |
@@ -124,7 +135,8 @@ DECLARACION ::=
     T_dato Identificador Igual FUNCION_E P_coma |
     T_dato Identificador Igual Identificador |
     Int Identificador Igual Identificador |
-    DECLARACION_BOOL
+    DECLARACION_BOOL |
+    DECLARACION_FLOTANTE
 ;
 
 ASIGNACION ::=  
