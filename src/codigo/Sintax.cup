@@ -46,10 +46,6 @@ INICIO ::=
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
     DECLARACION |
-    SENTENCIA IF | 
-    IF |
-    SENTENCIA IF_ELSE |
-    IF_ELSE |
     SENTENCIA WHILE |
     WHILE |
     SENTENCIA DO_WHILE
@@ -70,6 +66,7 @@ SENTENCIA ::=
     FUNCION_D
 ;
 
+//Bloque funcion sirve para asegurar el tipo retornado en una funcion 
 BLOQUE_FUNCION_ENTERA ::=
     SENTENCIA RETURN_ENTERA |
     RETURN_ENTERA SENTENCIA |
@@ -141,16 +138,22 @@ RETURN_ENTERA ::=
     Return VAR_ENTERA P_coma
 ;
 
+//hay que revisar el identificador
 RETURN_FLOTANTE ::=
-    Return VAR_FLOTANTE P_coma
+    Return VAR_FLOTANTE P_coma|
+    Return Identificador P_coma
 ;
 
+//hay que revisar el identificador
 RETURN_BOOLEALA ::=
-    Return Op_booleano P_coma
+    Return Op_booleano P_coma|
+    Return Identificador P_coma
 ;
 
+//hay que revisar el identificador
 RETURN_CADENA ::=
-    Return CADENA P_coma
+    Return CADENA P_coma |
+    Return Identificador P_coma
 ;
 
 FUNVAR ::=
@@ -347,10 +350,6 @@ ASIGNACION_STRING ::=
     Identificador Igual Read Parentesis_a Parentesis_c P_coma 
 ;
 
-IF ::= 
-    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
-;
-
 IFARIT_FLOTANTE ::= 
     Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR_FLOTANTE Op_Sino VAR_FLOTANTE
 ;
@@ -372,6 +371,10 @@ WRITE ::=
     Write Parentesis_a Identificador Parentesis_c P_coma 
 ;
 
+IF ::= 
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+
 IF_ELSE ::= 
     If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
 ;
@@ -381,7 +384,9 @@ ELIF ::=
     ELIF Elif Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;
 
-IF_ELIF_ELSE ::= 
+IF_ELIF_ELSE ::=
+    IF |
+    IF_ELSE |
     IF ELIF |
     IF ELIF Else Llave_a SENTENCIA Llave_c
 ;
