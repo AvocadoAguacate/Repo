@@ -20,7 +20,7 @@ terminal Linea, Comillas, Int, Float, Bool, Cadena, If, Else, Do, While, For,
     Op_igualdad, Op_atribucion, Op_incremento, Op_booleano, Parentesis_a,
     Parentesis_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
     Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, 
-    Op_Sino, Read, Write, Fun, Flotante;
+    Op_Sino, Read, Write, Fun, Flotante, Nulo;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR,
     VARIABLES, EXPRESION_ENTERA, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, 
@@ -177,7 +177,8 @@ FUNCIONES ::=
 DECLARACION_BOOL ::=
     Bool Identificador P_coma |
     Bool Identificador Igual SENTENCIA_BOOLEANA P_coma |
-    Bool Identificador Igual Identificador P_coma
+    Bool Identificador Igual Identificador P_coma 
+    | Bool Identificador Igual Nulo P_coma 
     | DECLARACION_ARREGLO_BOOL 
 ;
 
@@ -225,6 +226,7 @@ VALBOOLIGUALDAD::=
 DECLARACION_FLOTANTE ::=
     Float Identificador P_coma
     | Float Identificador Igual EXPRESION_FLOTANTE P_coma
+    | Float Identificador Igual Nulo P_coma
     | DECLARACION_ARREGLO_FLOTANTE 
 ;
 
@@ -265,6 +267,7 @@ VAR_FLOTANTE ::=
 DECLARACION_ENTERA ::=
       Int Identificador P_coma 
     | Int Identificador Igual EXPRESION_ENTERA P_coma
+    | Int Identificador Igual Nulo P_coma
     | DECLARACION_ARREGLO_ENTERA 
 ;
 
@@ -305,7 +308,8 @@ VAR_ENTERA ::=
 
 DECLARACION_STRING ::=
     Cadena Identificador P_coma |
-    Cadena Identificador Igual CADENA P_coma
+    Cadena Identificador Igual CADENA P_coma |
+    Cadena Identificador Igual Nulo P_coma
 ;
 
 CADENA ::=
@@ -327,23 +331,28 @@ ASIGNACION ::=
     ASIGNACION_ENTERA |
     ASIGNACION_FLOTANTE |
     ASIGNACION_STRING |
-    ASIGNACION_BOOL
+    ASIGNACION_BOOL |
+    Identificador Igual Nulo P_coma |
+    Identificador Corchete_a Numero Corchete_c Igual Nulo P_coma
 ;
 
 ASIGNACION_BOOL ::=
     Identificador Igual SENTENCIA_BOOLEANA P_coma
+    | Identificador Corchete_a Numero Corchete_c Igual SENTENCIA_BOOLEANA P_coma
     | Identificador Corchete_a Corchete_c Igual ARREGLO_BOOL P_coma
     | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_BOOL P_coma
 ;
 
 ASIGNACION_ENTERA ::=
     Identificador Igual EXPRESION_ENTERA P_coma 
+    | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_ENTERA P_coma
     | Identificador Corchete_a Corchete_c Igual ARREGLO_ENTERA P_coma
     | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_ENTERA P_coma
 ;
 
 ASIGNACION_FLOTANTE ::=
     Identificador Igual EXPRESION_FLOTANTE P_coma 
+    | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_FLOTANTE P_coma 
     | Identificador Corchete_a Corchete_c Igual ARREGLO_FLOTANTE P_coma
     | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_FLOTANTE P_coma
 ;

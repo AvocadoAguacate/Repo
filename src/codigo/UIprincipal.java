@@ -304,6 +304,9 @@ public class UIprincipal extends javax.swing.JFrame {
                 case Flotante:
                     resultado += "  <Flotante>\t\t" + lexer.lexeme + "\n";
                     break;
+                case Nulo:
+                    resultado += "  <Nulo>\t\t" + lexer.lexeme + "\n";
+                    break;
                 case ERROR:
                     resultado += "  <Simbolo no definido>\n";
                     break;

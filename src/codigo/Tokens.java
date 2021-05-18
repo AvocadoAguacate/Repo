@@ -47,5 +47,6 @@ public enum Tokens {
     Break,
     Return,
     ERROR,
-    Flotante
+    Flotante,
+    Nulo
 }

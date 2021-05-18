@@ -142,6 +142,9 @@ espacio=[ ,\t,\r,\n]+
 /* Marcador de inicio de algoritmo */
 ( "main" ) {return new Symbol(sym.Main, yychar, yyline, yytext());}
 
+/* Marcador de inicio de algoritmo */
+( "null" ) {return new Symbol(sym.Nulo, yychar, yyline, yytext());}
+
 /* Punto y coma */
 ( ";" ) {return new Symbol(sym.P_coma, yychar, yyline, yytext());}
 

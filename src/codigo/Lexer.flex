@@ -113,6 +113,9 @@ espacio=[ ,\t,\r]+
 /* Marcador de inicio de algoritmo */
 ( "main" ) {lexeme=yytext(); return Main;}
 
+/* Marcador de inicio de algoritmo */
+( "null" ) {lexeme=yytext(); return Nulo;}
+
 /* Punto y coma */
 ( ";" ) {lexeme=yytext(); return P_coma;}
 
