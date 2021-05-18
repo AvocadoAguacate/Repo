@@ -307,6 +307,9 @@ public class UIprincipal extends javax.swing.JFrame {
                 case Nulo:
                     resultado += "  <Nulo>\t\t" + lexer.lexeme + "\n";
                     break;
+                case Caracter:
+                    resultado += "  <Caracter>\t\t" + lexer.lexeme + "\n";
+                    break;
                 case ERROR:
                     resultado += "  <Simbolo no definido>\n";
                     break;

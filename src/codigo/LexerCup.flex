@@ -30,7 +30,7 @@ espacio=[ ,\t,\r,\n]+
 ( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
 
 /* Tipos de datos */
-( byte | char | long  | double ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
+( byte | long  | double ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
 
 /* Tipo de dato Int */
 ( "int" ) {return new Symbol(sym.Int, yychar, yyline, yytext());}
@@ -40,6 +40,9 @@ espacio=[ ,\t,\r,\n]+
 
 /* Tipo de dato Bool */
 ( "bool" ) {return new Symbol(sym.Bool, yychar, yyline, yytext());}
+
+/* Tipo de dato Char */
+( "char" ) {return new Symbol(sym.Char, yychar, yyline, yytext());}
 
 /* Tipo de dato String */
 ( String ) {return new Symbol(sym.Cadena, yychar, yyline, yytext());}
@@ -156,6 +159,9 @@ espacio=[ ,\t,\r,\n]+
 
 /* Flotante */
 ("-"{D}+ "." {D}+ )|{D}+ "." {D}+ {return new Symbol(sym.Flotante, yychar, yyline, yytext());}
+
+/* Caracter */
+"'"[a-zA-Z]"'" {return new Symbol(sym.Caracter, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}

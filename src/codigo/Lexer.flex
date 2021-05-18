@@ -128,5 +128,8 @@ espacio=[ ,\t,\r]+
 /* Flotante */
 ("-"{D}+ "." {D}+ )|{D}+ "." {D}+ {lexeme=yytext(); return Flotante;}
 
+/* Caracter */
+"'"[a-zA-Z]"'" {lexeme=yytext(); return Caracter;}
+
 /* Error de analisis */
  . {return ERROR;}

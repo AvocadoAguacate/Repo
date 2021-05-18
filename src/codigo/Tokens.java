@@ -48,5 +48,6 @@ public enum Tokens {
     Return,
     ERROR,
     Flotante,
-    Nulo
+    Nulo,
+    Caracter
 }
