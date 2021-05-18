@@ -15,41 +15,37 @@ parser code
 }
 :};
 
-terminal Linea, Comillas, Int, Float, Bool, Cadena, If, Else, Do, While, For,
+terminal Linea, Comillas, Int, Float, Bool, Cadena, If, Else, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_cantidad,
     Op_igualdad, Op_atribucion, Op_incremento, Op_booleano, Parentesis_a,
     Parentesis_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
     Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, 
     Op_Sino, Read, Write, Fun, Flotante, Nulo;
-non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR,
-    VARIABLES, EXPRESION_ENTERA, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, 
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF,
+    IF_ELSE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, VARIABLES, 
+    EXPRESION_ENTERA, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, 
     ELIF, WRITE, FUNCION_D, FUNCIONES, DECLARACION_BOOL,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
     EXPRESION_FLOTANTE, VAR_FLOTANTE, VAR_ENTERA, DECLARACION_ENTERA, 
     ASIGNACION_ENTERA, ASIGNACION_FLOTANTE, ASIGNACION_STRING, DECLARACION_STRING,
     IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA, 
-    DECLARACION_ARREGLO_FLOTANTE, DECLARACION_ARREGLO_ENTERA, 
+    DECLARACION_ARREGLO_FLOTANTE, DECLARACION_ARREGLO_ENTERA, ELSE, 
     ARREGLO_FLOTANTE, ARREGLO_ENTERA, VARIABLES_ENTERAS, VARIABLES_FLOTANTES,
     VARIABLES_BOOLEANAS, ARREGLO_BOOL, DECLARACION_ARREGLO_BOOL, ASIGNACION_BOOL,
-    FUNCION_DECLARACION_BOOL, FUNCION_DECLARACION_CADENA, FUNCION_DECLARACION_FLOAT,
-    FUNCION_DECLARACION_INT, RETURN_BOOLEALA, RETURN_CADENA, RETURN_ENTERA, RETURN_FLOTANTE,
-    BLOQUE_FUNCION_ENTERA, BLOQUE_FUNCION_FLOTANTE, BLOQUE_FUNCION_CADENA,
-    BLOQUE_FUNCION_BOOL, FUNCION_DECLARACION_VARIABLES, FUNCION_DECLARACION_VARIABLE;
+    FUNCION_DECLARACION_CADENA, FUNCION_DECLARACION_FLOAT, FUNCION_DECLARACION_INT,
+    RETURN_CADENA, RETURN_ENTERA, RETURN_FLOTANTE, BLOQUE_FUNCION_ENTERA,
+    BLOQUE_FUNCION_FLOTANTE, BLOQUE_FUNCION_CADENA, FUNCION_DECLARACION_VARIABLES,
+    FUNCION_DECLARACION_VARIABLE;
 
 start with INICIO;
 
 INICIO ::= 
-    Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
-    Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c FUNCIONES
+      Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+    | Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c FUNCIONES
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
     DECLARACION |
-    SENTENCIA WHILE |
-    WHILE |
-    SENTENCIA DO_WHILE
-    DO_WHILE |
     SENTENCIA FOR |
     FOR |
     SENTENCIA FUNCION_E |
@@ -66,6 +62,7 @@ SENTENCIA ::=
     FUNCION_D
 ;
 
+//hay que arreglar esto, hacer un sentecia con return en if/for
 //Bloque funcion sirve para asegurar el tipo retornado en una funcion 
 BLOQUE_FUNCION_ENTERA ::=
     SENTENCIA RETURN_ENTERA |
@@ -79,12 +76,7 @@ BLOQUE_FUNCION_FLOTANTE ::=
     RETURN_FLOTANTE
 ;
 
-BLOQUE_FUNCION_BOOL ::=
-    SENTENCIA RETURN_BOOLEALA |
-    RETURN_BOOLEALA SENTENCIA |
-    RETURN_BOOLEALA
-;
-
+//Cambiar a Char
 BLOQUE_FUNCION_CADENA ::=
     SENTENCIA RETURN_CADENA |
     RETURN_CADENA SENTENCIA |
@@ -104,7 +96,6 @@ VARIABLES ::=
 ;
 
 FUNCION_D ::= 
-    FUNCION_DECLARACION_BOOL |
     FUNCION_DECLARACION_CADENA |
     FUNCION_DECLARACION_FLOAT |
     FUNCION_DECLARACION_INT 
@@ -122,11 +113,6 @@ FUNCION_DECLARACION_FLOAT ::=
     Fun Parentesis_a Identificador Float FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_FUNCION_FLOTANTE Llave_c 
 ;
 
-//falta revisar el return 
-FUNCION_DECLARACION_BOOL ::= 
-    Fun Parentesis_a Identificador Bool Parentesis_c Llave_a BLOQUE_FUNCION_BOOL Llave_c |
-    Fun Parentesis_a Identificador Bool FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_FUNCION_BOOL Llave_c 
-;
 
 //falta revisar el return 
 FUNCION_DECLARACION_CADENA ::= 
@@ -157,11 +143,6 @@ RETURN_FLOTANTE ::=
     Return Identificador P_coma
 ;
 
-//hay que revisar el identificador
-RETURN_BOOLEALA ::=
-    Return Op_booleano P_coma|
-    Return Identificador P_coma
-;
 
 //hay que revisar el identificador
 RETURN_CADENA ::=
@@ -313,9 +294,9 @@ DECLARACION_STRING ::=
 ;
 
 CADENA ::=
-    Comillas Comillas |
-    Comillas Identificador Comillas |
-    IFARIT_CADENA
+      Comillas Comillas 
+    | Comillas Identificador Comillas
+    | IFARIT_CADENA
 ;
 
 DECLARACION ::=
@@ -345,9 +326,9 @@ ASIGNACION_BOOL ::=
 
 ASIGNACION_ENTERA ::=
     Identificador Igual EXPRESION_ENTERA P_coma 
-    | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_ENTERA P_coma
+    | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_ENTERA P_coma 
     | Identificador Corchete_a Corchete_c Igual ARREGLO_ENTERA P_coma
-    | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_ENTERA P_coma
+    | Identificador Corchete_a Numero:numero Corchete_c Igual ARREGLO_ENTERA P_coma {:System.out.println(numero):}
 ;
 
 ASIGNACION_FLOTANTE ::=
@@ -388,7 +369,7 @@ IF ::=
 ;
 
 IF_ELSE ::= 
-    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
+    IF ELSE
 ;
 
 ELIF ::=
@@ -396,18 +377,17 @@ ELIF ::=
     ELIF Elif Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;
 
+ELSE ::=
+    Else Llave_a SENTENCIA Llave_c
+;
+
 IF_ELIF_ELSE ::=
     IF |
     IF_ELSE |
     IF ELIF |
-    IF ELIF Else Llave_a SENTENCIA Llave_c
+    IF ELIF ELSE
 ;
-WHILE ::= 
-    While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
-;
-DO_WHILE ::= 
-    Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
-;
+
 FOR ::= 
     For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
 ;
