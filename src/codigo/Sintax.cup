@@ -22,14 +22,16 @@ terminal Linea, Comillas, Int, Float, Bool, Cadena, If, Else, Do, While, For,
     Numero, ERROR, Op_diferencia, Potencia, Elif, Return, Break, Op_pregunta, 
     Op_Sino, Read, Write, Fun, Flotante;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, ARREGLOE,
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR,
     VARIABLES, EXPRESION_ENTERA, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, 
     ELIF, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
     EXPRESION_FLOTANTE, VAR_FLOTANTE, VAR_ENTERA, DECLARACION_ENTERA, 
     ASIGNACION_ENTERA, ASIGNACION_FLOTANTE, ASIGNACION_STRING, DECLARACION_STRING,
     IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA,
-    VAR_BOOL_IFARIT;
+    VAR_BOOL_IFARIT, DECLARACION_ARREGLO_FLOTANTE, DECLARACION_ARREGLO_ENTERA, 
+    ARREGLO_FLOTANTE, ARREGLO_ENTERA, VARIABLES_ENTERAS, VARIABLES_FLOTANTES,
+    VARIABLES_BOOLEANAS, ARREGLO_BOOL, DECLARACION_ARREGLO_BOOL;
 
 start with INICIO;
 
@@ -67,8 +69,15 @@ SENTENCIA ::=
 ;
 
 FUNCION_E ::=
-    Identificador Parentesis_a Parentesis_c |
-    Identificador Parentesis_a VARIABLES Parentesis_c
+    Fun Identificador Parentesis_a Parentesis_c |
+    Fun Identificador Parentesis_a VARIABLES Parentesis_c
+;
+
+VARIABLES ::=
+    Identificador |
+    Numero |
+    Flotante |
+    CADENA
 ;
 
 FUNCION_D ::= 
@@ -94,6 +103,23 @@ DECLARACION_BOOL ::=
     Bool Identificador P_coma |
     Bool Identificador Igual SENTENCIA_BOOLEANA P_coma |
     Bool Identificador Igual Identificador P_coma
+    | DECLARACION_ARREGLO_BOOL 
+;
+
+DECLARACION_ARREGLO_BOOL ::=
+      Bool Identificador Corchete_a Corchete_c P_coma
+    | Bool Identificador Corchete_a Numero Corchete_c P_coma
+    | Bool Identificador Corchete_a Corchete_c Igual ARREGLO_BOOL P_coma
+    | Bool Identificador Corchete_a Numero Corchete_c Igual ARREGLO_BOOL P_coma
+;
+
+ARREGLO_BOOL ::= 
+    Llave_a VARIABLES_BOOLEANAS Llave_c
+;
+
+VARIABLES_BOOLEANAS ::= 
+    VAR_BOOL_IFARIT |
+    VARIABLES_BOOLEANAS VAR_BOOL_IFARIT
 ;
 
 //identificador solitario no quiere agregarse, está en declaración boleana
@@ -121,8 +147,25 @@ VALBOOLIGUALDAD::=
 ;
 
 DECLARACION_FLOTANTE ::=
-    Float Identificador P_coma |
-    Float Identificador Igual EXPRESION_FLOTANTE P_coma
+    Float Identificador P_coma
+    | Float Identificador Igual EXPRESION_FLOTANTE P_coma
+    | DECLARACION_ARREGLO_FLOTANTE 
+;
+
+DECLARACION_ARREGLO_FLOTANTE ::=
+      Float Identificador Corchete_a Corchete_c P_coma
+    | Float Identificador Corchete_a Numero Corchete_c P_coma
+    | Float Identificador Corchete_a Corchete_c Igual ARREGLO_FLOTANTE P_coma
+    | Float Identificador Corchete_a Numero Corchete_c Igual ARREGLO_FLOTANTE P_coma
+;
+
+ARREGLO_FLOTANTE ::= 
+    Llave_a VARIABLES_FLOTANTES Llave_c
+;
+
+VARIABLES_FLOTANTES ::= 
+    VAR_FLOTANTE |
+    VARIABLES_FLOTANTES VAR_FLOTANTE
 ;
 
 //Hay que revisar que IFRIT devuelva un flotante
@@ -145,7 +188,24 @@ VAR_FLOTANTE ::=
 
 DECLARACION_ENTERA ::=
       Int Identificador P_coma 
-    | Int Identificador Igual EXPRESION_ENTERA P_coma 
+    | Int Identificador Igual EXPRESION_ENTERA P_coma
+    | DECLARACION_ARREGLO_ENTERA 
+;
+
+DECLARACION_ARREGLO_ENTERA ::=
+      Int Identificador Corchete_a Corchete_c P_coma
+    | Int Identificador Corchete_a Numero Corchete_c P_coma
+    | Int Identificador Corchete_a Corchete_c Igual ARREGLO_ENTERA P_coma
+    | Int Identificador Corchete_a Numero Corchete_c Igual ARREGLO_ENTERA P_coma
+;
+
+ARREGLO_ENTERA ::= 
+    Llave_a VARIABLES_ENTERAS Llave_c
+;
+
+VARIABLES_ENTERAS ::= 
+    VAR_ENTERA |
+    VARIABLES_ENTERAS VAR_ENTERA
 ;
 
 EXPRESION_ENTERA ::=
@@ -211,15 +271,6 @@ ASIGNACION_STRING ::=
     Identificador Igual Comillas Comillas P_coma |
     Identificador Igual Comillas Identificador Comillas P_coma |
     Identificador Igual Read Parentesis_a Parentesis_c P_coma 
-;
-
-ARREGLOE ::= 
-    Llave_a VARIABLES Llave_c
-;
-//hay que validar variables iguales en los arreglos
-VARIABLES ::= 
-    VALBOOLIGUALDAD |
-    VARIABLES VALBOOLIGUALDAD
 ;
 
 IF ::= 
