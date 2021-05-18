@@ -24,7 +24,7 @@ terminal Linea, Comillas, Int, Float, Bool, Cadena, If, Else, Do, While, For,
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR,
     VARIABLES, EXPRESION_ENTERA, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, 
-    ELIF, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
+    ELIF, WRITE, FUNCION_D, FUNCIONES, DECLARACION_BOOL,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
     EXPRESION_FLOTANTE, VAR_FLOTANTE, VAR_ENTERA, DECLARACION_ENTERA, 
     ASIGNACION_ENTERA, ASIGNACION_FLOTANTE, ASIGNACION_STRING, DECLARACION_STRING,
@@ -35,7 +35,7 @@ non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     FUNCION_DECLARACION_BOOL, FUNCION_DECLARACION_CADENA, FUNCION_DECLARACION_FLOAT,
     FUNCION_DECLARACION_INT, RETURN_BOOLEALA, RETURN_CADENA, RETURN_ENTERA, RETURN_FLOTANTE,
     BLOQUE_FUNCION_ENTERA, BLOQUE_FUNCION_FLOTANTE, BLOQUE_FUNCION_CADENA,
-    BLOQUE_FUNCION_BOOL;
+    BLOQUE_FUNCION_BOOL, FUNCION_DECLARACION_VARIABLES, FUNCION_DECLARACION_VARIABLE;
 
 start with INICIO;
 
@@ -113,25 +113,38 @@ FUNCION_D ::=
 //falta revisar el return 
 FUNCION_DECLARACION_INT ::= 
     Fun Parentesis_a Identificador Int Parentesis_c Llave_a BLOQUE_FUNCION_ENTERA Llave_c |
-    Fun Parentesis_a Identificador Int FUNVARS Parentesis_c Llave_a BLOQUE_FUNCION_ENTERA Llave_c 
+    Fun Parentesis_a Identificador Int FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_FUNCION_ENTERA Llave_c 
 ;
 
 //falta revisar el return 
 FUNCION_DECLARACION_FLOAT ::= 
     Fun Parentesis_a Identificador Float Parentesis_c Llave_a BLOQUE_FUNCION_FLOTANTE Llave_c |
-    Fun Parentesis_a Identificador Float FUNVARS Parentesis_c Llave_a BLOQUE_FUNCION_FLOTANTE Llave_c 
+    Fun Parentesis_a Identificador Float FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_FUNCION_FLOTANTE Llave_c 
 ;
 
 //falta revisar el return 
 FUNCION_DECLARACION_BOOL ::= 
     Fun Parentesis_a Identificador Bool Parentesis_c Llave_a BLOQUE_FUNCION_BOOL Llave_c |
-    Fun Parentesis_a Identificador Bool FUNVARS Parentesis_c Llave_a BLOQUE_FUNCION_BOOL Llave_c 
+    Fun Parentesis_a Identificador Bool FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_FUNCION_BOOL Llave_c 
 ;
 
 //falta revisar el return 
 FUNCION_DECLARACION_CADENA ::= 
     Fun Parentesis_a Identificador Cadena Parentesis_c Llave_a BLOQUE_FUNCION_CADENA Llave_c |
-    Fun Parentesis_a Identificador Cadena FUNVARS Parentesis_c Llave_a BLOQUE_FUNCION_CADENA Llave_c 
+    Fun Parentesis_a Identificador Cadena FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_FUNCION_CADENA Llave_c 
+;
+
+
+FUNCION_DECLARACION_VARIABLES ::=
+    FUNCION_DECLARACION_VARIABLES FUNCION_DECLARACION_VARIABLE |
+    FUNCION_DECLARACION_VARIABLE
+;
+
+FUNCION_DECLARACION_VARIABLE ::=
+    Int Identificador |
+    Float Identificador |
+    Bool Identificador |
+    Cadena Identificador
 ;
 
 RETURN_ENTERA ::=
@@ -154,15 +167,6 @@ RETURN_BOOLEALA ::=
 RETURN_CADENA ::=
     Return CADENA P_coma |
     Return Identificador P_coma
-;
-
-FUNVAR ::=
-    Int Identificador 
-;
-
-FUNVARS ::=
-    FUNVARS FUNVAR |
-    FUNVAR
 ;
 
 FUNCIONES ::=
@@ -345,8 +349,7 @@ ASIGNACION_FLOTANTE ::=
 ;
 
 ASIGNACION_STRING ::=
-    Identificador Igual Comillas Comillas P_coma |
-    Identificador Igual Comillas Identificador Comillas P_coma |
+    Identificador Igual CADENA P_coma |
     Identificador Igual Read Parentesis_a Parentesis_c P_coma 
 ;
 
