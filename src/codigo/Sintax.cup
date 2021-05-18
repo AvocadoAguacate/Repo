@@ -1,6 +1,6 @@
 package codigo;
 
-import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
 
 parser code
 {:
@@ -15,7 +15,7 @@ parser code
 }
 :};
 
-terminal Linea, Comillas, T_dato, Int, Float, Bool, Cadena, If, Else, Do, While, For,
+terminal Linea, Comillas, Int, Float, Bool, Cadena, If, Else, Do, While, For,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_cantidad,
     Op_igualdad, Op_atribucion, Op_incremento, Op_booleano, Parentesis_a,
     Parentesis_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
@@ -23,10 +23,13 @@ terminal Linea, Comillas, T_dato, Int, Float, Bool, Cadena, If, Else, Do, While,
     Op_Sino, Read, Write, Fun, Flotante;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, ARREGLOE,
-    VARIABLES, EXPRESION, VAR, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, ELIF, 
-    IFARIT, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
+    VARIABLES, EXPRESION_ENTERA, FUNCION_E, ASIGNACION, IF_ELIF_ELSE, 
+    ELIF, WRITE, FUNCION_D, FUNVARS, FUNVAR, FUNCIONES, DECLARACION_BOOL,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
-    EXPRESION_FLOTANTE, VAR_FLOTANTE;
+    EXPRESION_FLOTANTE, VAR_FLOTANTE, VAR_ENTERA, DECLARACION_ENTERA, 
+    ASIGNACION_ENTERA, ASIGNACION_FLOTANTE, ASIGNACION_STRING, DECLARACION_STRING,
+    IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA,
+    VAR_BOOL_IFARIT;
 
 start with INICIO;
 
@@ -70,14 +73,11 @@ FUNCION_E ::=
 
 FUNCION_D ::= 
     Fun Parentesis_a Identificador Int Parentesis_c Llave_a SENTENCIA Llave_c |
-    Fun Parentesis_a Identificador T_dato Parentesis_c Llave_a SENTENCIA Llave_c |
-    Fun Parentesis_a Identificador Int FUNVARS Parentesis_c Llave_a SENTENCIA Llave_c |
-    Fun Parentesis_a Identificador T_dato FUNVARS Parentesis_c Llave_a SENTENCIA Llave_c
+    Fun Parentesis_a Identificador Int FUNVARS Parentesis_c Llave_a SENTENCIA Llave_c 
 ;
 
 FUNVAR ::=
-    Int Identificador |
-    T_dato Identificador
+    Int Identificador 
 ;
 
 FUNVARS ::=
@@ -96,120 +96,10 @@ DECLARACION_BOOL ::=
     Bool Identificador Igual Identificador P_coma
 ;
 
-DECLARACION_FLOTANTE ::=
-    Float Identificador P_coma |
-    Float Identificador Igual EXPRESION_FLOTANTE P_coma
-;
-
-//Hay que revisar que IFRIT devuelva un flotante
-EXPRESION_FLOTANTE ::=
-    EXPRESION_FLOTANTE Suma VAR_FLOTANTE |
-    EXPRESION_FLOTANTE Resta VAR_FLOTANTE   |
-    EXPRESION_FLOTANTE Multiplicacion VAR_FLOTANTE |
-    EXPRESION_FLOTANTE Division VAR_FLOTANTE |
-    EXPRESION_FLOTANTE Potencia  VAR_FLOTANTE |
-    VAR_FLOTANTE 
-;
-
-//Hay que revisar que VAR devuelvan un flotante con la tabla de simbolos
-VAR_FLOTANTE ::=
-    Flotante |
-    Identificador |
-    IFARIT |
-    Parentesis_a EXPRESION_FLOTANTE Parentesis_c 
-;
-
-DECLARACION ::= 
-    Int Identificador P_coma | 
-    Int Identificador Op_atribucion Numero P_coma |
-    Int Identificador Igual Numero P_coma |
-    Int Identificador Op_incremento P_coma | 
-    Int Op_incremento Identificador P_coma | 
-    T_dato Identificador P_coma | 
-    T_dato Identificador Op_atribucion Numero P_coma |
-    T_dato Identificador Igual Numero P_coma |
-    T_dato Identificador Op_incremento P_coma | 
-    T_dato Op_incremento Identificador P_coma | 
-    Cadena Identificador Op_atribucion Comillas Comillas P_coma |
-    Cadena Identificador Igual Comillas Comillas P_coma |
-    Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
-    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
-    T_dato Identificador Corchete_a Numero Corchete_c P_coma |
-    T_dato Identificador Corchete_a Corchete_c P_coma |
-    T_dato Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
-    T_dato Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
-    Int Identificador Corchete_a Numero Corchete_c P_coma |
-    Int Identificador Corchete_a Corchete_c P_coma |
-    Int Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
-    Int Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
-    Int Identificador Igual EXPRESION P_coma |
-    T_dato Identificador Igual EXPRESION P_coma |
-    Int Identificador Igual FUNCION_E P_coma |
-    T_dato Identificador Igual FUNCION_E P_coma |
-    T_dato Identificador Igual Identificador |
-    Int Identificador Igual Identificador |
-    DECLARACION_BOOL |
-    DECLARACION_FLOTANTE
-;
-
-ASIGNACION ::=  
-    Identificador Op_atribucion Numero P_coma |
-    Identificador Igual Numero P_coma |
-    Identificador Op_incremento P_coma | 
-    Op_incremento Identificador P_coma |
-    Identificador Op_atribucion Comillas Comillas P_coma |
-    Identificador Igual Comillas Comillas P_coma |
-    Identificador Op_atribucion Comillas Identificador Comillas P_coma |
-    Identificador Igual Comillas Identificador Comillas P_coma |
-    Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
-    Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
-    Identificador Igual EXPRESION P_coma |
-    Identificador Igual Read Parentesis_a Parentesis_c P_coma |
-    Identificador Igual FUNCION_E P_coma |
-    Identificador Igual Identificador P_coma
-;
-//cambiar de lado expresion
-EXPRESION ::=
-    EXPRESION Suma VAR |
-    EXPRESION Resta VAR |
-    EXPRESION Multiplicacion VAR |
-    EXPRESION Division VAR |
-    EXPRESION Potencia VAR |
-    VAR Suma VAR |
-    VAR Resta VAR |
-    VAR Multiplicacion VAR |
-    VAR Division VAR |
-    VAR Potencia VAR |
-    IFARIT
-;
-
-VAR ::= 
-    Identificador |
-    FUNCION_E 
-;
-
-ARREGLOE ::= Llave_a VARIABLES Llave_c
-;
-//hay que validar variables iguales en los arreglos
-VARIABLES ::= VALBOOLIGUALDAD |
-    VARIABLES VALBOOLIGUALDAD
-;
-
-IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
-;
-
-IFARIT ::= 
-    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR Op_Sino VAR
-;
-
-WRITE ::=
-    Write Parentesis_a VAR Parentesis_c P_coma |
-    Write Parentesis_a EXPRESION Parentesis_c P_coma
-;
-
 //identificador solitario no quiere agregarse, está en declaración boleana
 SENTENCIA_BOOLEANA ::= 
     Op_booleano |
+    IFARIT_BOOL |
     VALBOOLLOGICO Op_diferencia |
     Identificador Op_diferencia |
     VALBOOLCANTIDAD Op_cantidad VALBOOLCANTIDAD |
@@ -230,7 +120,138 @@ VALBOOLIGUALDAD::=
     Op_booleano
 ;
 
-IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
+DECLARACION_FLOTANTE ::=
+    Float Identificador P_coma |
+    Float Identificador Igual EXPRESION_FLOTANTE P_coma
+;
+
+//Hay que revisar que IFRIT devuelva un flotante
+EXPRESION_FLOTANTE ::=
+    EXPRESION_FLOTANTE Suma VAR_FLOTANTE |
+    EXPRESION_FLOTANTE Resta VAR_FLOTANTE   |
+    EXPRESION_FLOTANTE Multiplicacion VAR_FLOTANTE |
+    EXPRESION_FLOTANTE Division VAR_FLOTANTE |
+    EXPRESION_FLOTANTE Potencia  VAR_FLOTANTE |
+    VAR_FLOTANTE 
+;
+
+//Hay que revisar que VAR devuelvan un flotante con la tabla de simbolos
+//Falta Identificador 
+VAR_FLOTANTE ::=
+    Flotante:flotante {:System.out.println(flotante):}
+    | IFARIT_FLOTANTE 
+    | Parentesis_a EXPRESION_FLOTANTE Parentesis_c 
+;
+
+DECLARACION_ENTERA ::=
+      Int Identificador P_coma 
+    | Int Identificador Igual EXPRESION_ENTERA P_coma 
+;
+
+EXPRESION_ENTERA ::=
+    EXPRESION_ENTERA Suma VAR_ENTERA |
+    EXPRESION_ENTERA Resta VAR_ENTERA |
+    EXPRESION_ENTERA Multiplicacion VAR_ENTERA |
+    EXPRESION_ENTERA Division VAR_ENTERA |
+    EXPRESION_ENTERA Potencia VAR_ENTERA |
+    VAR_ENTERA
+;
+
+//Hay que revisar que VAR devuelvan enteros con la tabla de simbolos
+// id++ exclusivo para identificadores 
+VAR_ENTERA ::= 
+      Identificador 
+    | FUNCION_E 
+    | IFARIT_ENTERA
+    | Numero
+    | Identificador Op_incremento
+;
+
+DECLARACION_STRING ::=
+    Cadena Identificador P_coma |
+    Cadena Identificador Igual CADENA P_coma
+;
+
+CADENA ::=
+    Comillas Comillas |
+    Comillas Identificador Comillas |
+    IFARIT_CADENA
+;
+
+//    Int Identificador Corchete_a Numero Corchete_c P_coma |
+//    Int Identificador Corchete_a Corchete_c P_coma |
+//    Int Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
+//    Int Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
+DECLARACION ::=
+    DECLARACION_BOOL |
+    DECLARACION_FLOTANTE |
+    DECLARACION_ENTERA |
+    DECLARACION_STRING
+;
+
+//    Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
+//    Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
+//READ se encuentra en String
+ASIGNACION ::= 
+    Op_incremento Identificador P_coma |
+    ASIGNACION_ENTERA |
+    ASIGNACION_FLOTANTE |
+    ASIGNACION_STRING
+;
+
+ASIGNACION_ENTERA ::=
+    Identificador Igual EXPRESION_ENTERA P_coma 
+;
+
+ASIGNACION_FLOTANTE ::=
+    Identificador Igual EXPRESION_FLOTANTE P_coma 
+;
+
+ASIGNACION_STRING ::=
+    Identificador Igual Comillas Comillas P_coma |
+    Identificador Igual Comillas Identificador Comillas P_coma |
+    Identificador Igual Read Parentesis_a Parentesis_c P_coma 
+;
+
+ARREGLOE ::= 
+    Llave_a VARIABLES Llave_c
+;
+//hay que validar variables iguales en los arreglos
+VARIABLES ::= 
+    VALBOOLIGUALDAD |
+    VARIABLES VALBOOLIGUALDAD
+;
+
+IF ::= 
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+
+IFARIT_FLOTANTE ::= 
+    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR_FLOTANTE Op_Sino VAR_FLOTANTE
+;
+
+IFARIT_ENTERA ::= 
+    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR_ENTERA Op_Sino VAR_ENTERA
+;
+
+IFARIT_CADENA ::= 
+    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta CADENA Op_Sino CADENA
+;
+
+IFARIT_BOOL ::= 
+    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR_BOOL_IFARIT Op_Sino VAR_BOOL_IFARIT 
+;
+VAR_BOOL_IFARIT::=
+    Identificador|
+    Op_booleano
+;
+WRITE ::=
+    Write Parentesis_a CADENA Parentesis_c P_coma |
+    Write Parentesis_a Identificador Parentesis_c P_coma 
+;
+
+IF_ELSE ::= 
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
 ;
 
 ELIF ::=
@@ -242,14 +263,16 @@ IF_ELIF_ELSE ::=
     IF ELIF |
     IF ELIF Else Llave_a SENTENCIA Llave_c
 ;
-WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+WHILE ::= 
+    While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;
-DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
+DO_WHILE ::= 
+    Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
 ;
-FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
+FOR ::= 
+    For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
 ;
 SENTENCIA_FOR ::=
-    T_dato Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
     Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR
 ;
 DECLARACION_FOR ::= 
