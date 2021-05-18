@@ -28,10 +28,10 @@ non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
     EXPRESION_FLOTANTE, VAR_FLOTANTE, VAR_ENTERA, DECLARACION_ENTERA, 
     ASIGNACION_ENTERA, ASIGNACION_FLOTANTE, ASIGNACION_STRING, DECLARACION_STRING,
-    IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA,
-    VAR_BOOL_IFARIT, DECLARACION_ARREGLO_FLOTANTE, DECLARACION_ARREGLO_ENTERA, 
+    IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA, 
+    DECLARACION_ARREGLO_FLOTANTE, DECLARACION_ARREGLO_ENTERA, 
     ARREGLO_FLOTANTE, ARREGLO_ENTERA, VARIABLES_ENTERAS, VARIABLES_FLOTANTES,
-    VARIABLES_BOOLEANAS, ARREGLO_BOOL, DECLARACION_ARREGLO_BOOL;
+    VARIABLES_BOOLEANAS, ARREGLO_BOOL, DECLARACION_ARREGLO_BOOL, ASIGNACION_BOOL;
 
 start with INICIO;
 
@@ -117,9 +117,10 @@ ARREGLO_BOOL ::=
     Llave_a VARIABLES_BOOLEANAS Llave_c
 ;
 
+//falta identificadores
 VARIABLES_BOOLEANAS ::= 
-    VAR_BOOL_IFARIT |
-    VARIABLES_BOOLEANAS VAR_BOOL_IFARIT
+    Op_booleano |
+    VARIABLES_BOOLEANAS Op_booleano
 ;
 
 //identificador solitario no quiere agregarse, está en declaración boleana
@@ -238,10 +239,6 @@ CADENA ::=
     IFARIT_CADENA
 ;
 
-//    Int Identificador Corchete_a Numero Corchete_c P_coma |
-//    Int Identificador Corchete_a Corchete_c P_coma |
-//    Int Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
-//    Int Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
 DECLARACION ::=
     DECLARACION_BOOL |
     DECLARACION_FLOTANTE |
@@ -249,22 +246,31 @@ DECLARACION ::=
     DECLARACION_STRING
 ;
 
-//    Identificador Corchete_a Numero Corchete_c Igual ARREGLOE P_coma |
-//    Identificador Corchete_a Corchete_c Igual ARREGLOE P_coma |
 //READ se encuentra en String
 ASIGNACION ::= 
     Op_incremento Identificador P_coma |
     ASIGNACION_ENTERA |
     ASIGNACION_FLOTANTE |
-    ASIGNACION_STRING
+    ASIGNACION_STRING |
+    ASIGNACION_BOOL
+;
+
+ASIGNACION_BOOL ::=
+    Identificador Igual SENTENCIA_BOOLEANA P_coma
+    | Identificador Corchete_a Corchete_c Igual ARREGLO_BOOL P_coma
+    | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_BOOL P_coma
 ;
 
 ASIGNACION_ENTERA ::=
     Identificador Igual EXPRESION_ENTERA P_coma 
+    | Identificador Corchete_a Corchete_c Igual ARREGLO_ENTERA P_coma
+    | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_ENTERA P_coma
 ;
 
 ASIGNACION_FLOTANTE ::=
     Identificador Igual EXPRESION_FLOTANTE P_coma 
+    | Identificador Corchete_a Corchete_c Igual ARREGLO_FLOTANTE P_coma
+    | Identificador Corchete_a Numero Corchete_c Igual ARREGLO_FLOTANTE P_coma
 ;
 
 ASIGNACION_STRING ::=
@@ -290,12 +296,9 @@ IFARIT_CADENA ::=
 ;
 
 IFARIT_BOOL ::= 
-    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta VAR_BOOL_IFARIT Op_Sino VAR_BOOL_IFARIT 
+    Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Op_pregunta Op_booleano Op_Sino Op_booleano 
 ;
-VAR_BOOL_IFARIT::=
-    Identificador|
-    Op_booleano
-;
+
 WRITE ::=
     Write Parentesis_a CADENA Parentesis_c P_coma |
     Write Parentesis_a Identificador Parentesis_c P_coma 
