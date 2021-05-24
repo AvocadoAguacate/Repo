@@ -233,7 +233,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="cc" red="cc" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Scanner"/>
+            <Property name="text" type="java.lang.String" value="Analisis l&#xe9;xico"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -241,7 +241,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="cc" red="cc" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Parser"/>
+            <Property name="text" type="java.lang.String" value="Analisis sint&#xe1;ctico y sem&#xe1;ntico"/>
           </Properties>
         </Component>
       </SubComponents>

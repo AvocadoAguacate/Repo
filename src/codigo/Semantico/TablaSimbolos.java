@@ -1,6 +1,15 @@
 package codigo.Semantico;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -11,12 +20,14 @@ public class TablaSimbolos {
     private ArrayList<TokenFuncion> funciones;
     private String funcionActual;
     private String bitacora;
+    private int contErrores;
     
     public TablaSimbolos() {
         variables = new ArrayList<TokenVariable>();
         funciones = new ArrayList<TokenFuncion>();
         funcionActual = "";
         bitacora = "";
+        contErrores = 0;
     }
     
     /**
@@ -32,7 +43,8 @@ public class TablaSimbolos {
             funciones.add(temp);            
         } else {
             bitacora += "La funcion ("+ id + ") ya existe, no es permitido dos "
-                    + "funciones con el mismo nombre.\n";            
+                    + "funciones con el mismo nombre.\n";   
+            contErrores += 1;
         }
 
     }
@@ -50,6 +62,7 @@ public class TablaSimbolos {
             bitacora += "No es permitido que la función (" + funcionActual + ") "
                     + "tenga dos parametros/variables con el mismo nombre ("
                     + id +").\n";
+            contErrores += 1;
         }
 
         
@@ -69,6 +82,7 @@ public class TablaSimbolos {
             } else {
                 bitacora += "La variable ("+ id + ") ya existe, no es permitido dos "
                         + "variables con el mismo nombre.\n";
+                contErrores += 1;
             }
         } else {
             addFuncionVariable(id,tipo);
@@ -119,10 +133,12 @@ public class TablaSimbolos {
                 } else {
                     bitacora += "La variable (" + id + ") no es tipo (" + tipo 
                             + ").\n";
+                    contErrores += 1;
                     return false;
                 }
             } else {
                 bitacora += "La variable ("+ id + ") no ha sido declarada.\n"; 
+                contErrores += 1;
                 return false;
             }
         } else {
@@ -145,10 +161,12 @@ public class TablaSimbolos {
             } else {
                 bitacora += "La funcion (" + id + ") no es tipo (" + tipo 
                         + ").\n";
+                contErrores += 1;
                 return false;
             }
         } else {
             bitacora += "La funcion ("+ id + ") no ha sido declarada\n"; 
+            contErrores += 1;
             return false;
         }
     }
@@ -168,10 +186,12 @@ public class TablaSimbolos {
                 return true;
             } else {
                 bitacora += "(" + id + ") no es de tipo (" + tipo + ").\n"; 
+                contErrores += 1;
                 return false;
             }
         } else {
             bitacora += "(" + id + ") no ha sido declarado.\n";
+            contErrores += 1;
             return false;
         }
     }
@@ -186,6 +206,21 @@ public class TablaSimbolos {
     public String getBitacora() {
         return bitacora;
     }
+    
+    public void guardarBitacora(){
+        JSONObject myJson = new JSONObject();
+        myJson.put("Cantidad", contErrores);
+        myJson.put("Bitacora", bitacora);
+        try {
+            FileWriter file = new FileWriter("D:/AnalizadorSintactico/Analizador/bitacora.json");
+            file.write(myJson.toJSONString());
+            file.flush();
+            file.close();
+        } catch (IOException ex) {
+            Logger.getLogger(TablaSimbolos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     
     
 }

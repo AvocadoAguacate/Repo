@@ -8,6 +8,7 @@ package codigo;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
@@ -15,12 +16,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 /**
  *
  * @author Esteban Guzmán R
  */
 public class UIprincipal extends javax.swing.JFrame {
 
+    private JSONObject bitacora;
     /**
      * Creates new form UIprincipal
      */
@@ -111,10 +116,10 @@ public class UIprincipal extends javax.swing.JFrame {
         jLabel1.setText("Editor");
 
         jLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel2.setText("Scanner");
+        jLabel2.setText("Analisis léxico");
 
         jLabel3.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel3.setText("Parser");
+        jLabel3.setText("Analisis sintáctico y semántico");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -138,7 +143,6 @@ public class UIprincipal extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAnalizarLex)
@@ -182,6 +186,20 @@ public class UIprincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void leerBitacora(){
+        JSONParser parser = new JSONParser();
+        try {     
+            Object obj = parser.parse(new FileReader("D:/AnalizadorSintactico/Analizador/bitacora.json"));
+            bitacora =  (JSONObject) obj;
+            System.out.println("acabo de leer el archivo");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } 
+    }
     private void analizarLexico() throws IOException{
         int cont = 1;
         
@@ -347,8 +365,23 @@ public class UIprincipal extends javax.swing.JFrame {
         
         try {
             s.parse();
-            txtAnalizarSin.setText("Analisis realizado correctamente");
+            String resultado = "Analisis sintactico realizado correctamente\n";
+            txtAnalizarSin.setText(resultado);
             txtAnalizarSin.setForeground(new Color(25, 111, 61));
+            leerBitacora();
+            resultado += "Numero de errores semanticos detectados: " + 
+                    (Long) bitacora.get("Cantidad") + "\n";
+            if((Long) bitacora.get("Cantidad") == 0) {
+                resultado += "Analisis semantico realizado correctamente\n";
+                txtAnalizarSin.setText(resultado);
+                txtAnalizarSin.setForeground(new Color(25, 111, 61));
+            } else {
+                resultado += bitacora .get("Bitacora");
+                txtAnalizarSin.setText(resultado);
+                txtAnalizarSin.setForeground(Color.red);
+            }
+            
+            
         } catch (Exception ex) {
             Symbol sym = s.getS();
             txtAnalizarSin.setText("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"");
