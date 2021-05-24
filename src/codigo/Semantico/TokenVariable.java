@@ -40,6 +40,6 @@ public class TokenVariable {
     
     @Override
     public String toString() {
-        return "   {" + "id=" + id + ",\n tipo=" + tipo + "}\n";
+        return "   {" + "id=" + id + ",\n    tipo=" + tipo + "}\n";
     }
 }

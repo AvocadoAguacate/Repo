@@ -8,5 +8,6 @@ public enum Tipos {
     String,
     Char,
     Int,
-    Float
+    Float,
+    Bool
 }

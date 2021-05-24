@@ -12,3 +12,5 @@ src/codigo/Lexer.java
 src/codigo/Sintax.java
 
 src/codigo/sym.java
+
+src/codigo/Semantico/NewMain.java

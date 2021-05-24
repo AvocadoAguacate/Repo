@@ -59,9 +59,18 @@ public class TokenFuncion {
         return tipo;
     }
     
+    public TokenVariable getVariable (String id) {
+        for(int i = 0; i < variables.size(); i++){
+            if(variables.get(i).getId().compareTo(id) == 0){
+                return variables.get(i);
+            }
+        }
+        return null;
+    }
+    
     @Override
     public String toString() {
-        return "   {" + "id=" + id + ",\n tipo=" + tipo + ",\n variables=[" 
-                + variables.toString() + "]}\n";
+        return "   {" + "id=" + id + ",\n    tipo=" + tipo + ",\n    variables=\n" 
+                + variables.toString() + "}\n";
     }
 }
