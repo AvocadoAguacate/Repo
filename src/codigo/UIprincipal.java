@@ -191,7 +191,6 @@ public class UIprincipal extends javax.swing.JFrame {
         try {     
             Object obj = parser.parse(new FileReader("D:/AnalizadorSintactico/Analizador/bitacora.json"));
             bitacora =  (JSONObject) obj;
-            System.out.println("acabo de leer el archivo");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -355,6 +354,7 @@ public class UIprincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnArchivoActionPerformed
 
     private void btnAnalizarLexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarLexActionPerformed
+        String resultado = "Analisis sintactico realizado correctamente\n";
         try {
             analizarLexico();
         } catch (IOException ex) {
@@ -365,10 +365,15 @@ public class UIprincipal extends javax.swing.JFrame {
         
         try {
             s.parse();
-            String resultado = "Analisis sintactico realizado correctamente\n";
             txtAnalizarSin.setText(resultado);
-            txtAnalizarSin.setForeground(new Color(25, 111, 61));
-            leerBitacora();
+            txtAnalizarSin.setForeground(new Color(25, 111, 61));   
+        } catch (Exception ex) {
+            Symbol sym = s.getS();
+            //txtAnalizarSin.setText("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"");
+            txtAnalizarSin.setText("Error de sintaxis.");
+            txtAnalizarSin.setForeground(Color.red);
+        }
+        leerBitacora();
             resultado += "Numero de errores semanticos detectados: " + 
                     (Long) bitacora.get("Cantidad") + "\n";
             if((Long) bitacora.get("Cantidad") == 0) {
@@ -380,13 +385,6 @@ public class UIprincipal extends javax.swing.JFrame {
                 txtAnalizarSin.setText(resultado);
                 txtAnalizarSin.setForeground(Color.red);
             }
-            
-            
-        } catch (Exception ex) {
-            Symbol sym = s.getS();
-            txtAnalizarSin.setText("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"");
-            txtAnalizarSin.setForeground(Color.red);
-        }
     }//GEN-LAST:event_btnAnalizarLexActionPerformed
 
     private void btnLimpiarLexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarLexActionPerformed

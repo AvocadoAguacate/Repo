@@ -25,9 +25,10 @@ public class TablaSimbolos {
     public TablaSimbolos() {
         variables = new ArrayList<TokenVariable>();
         funciones = new ArrayList<TokenFuncion>();
-        funcionActual = "";
+        funcionActual = "main";
         bitacora = "";
         contErrores = 0;
+        guardarBitacora();
     }
     
     /**
@@ -36,10 +37,10 @@ public class TablaSimbolos {
      * @param id identificador en .cup
      * @param tipo tipo de retorno de la funcion
      */
-    public void addFuncion(String id, String tipo){
+    public void addFuncion(String id, Tipos tipo){
         if( getFuncion(id) == null) {
             funcionActual = id;
-            TokenFuncion temp = new TokenFuncion(id,Tipos.valueOf(tipo));
+            TokenFuncion temp = new TokenFuncion(id,tipo);
             funciones.add(temp);            
         } else {
             bitacora += "La funcion ("+ id + ") ya existe, no es permitido dos "
@@ -54,18 +55,16 @@ public class TablaSimbolos {
      * @param id identificador de la funcion
      * @param tipo tipo de retorno de la funcion
      */
-    public void addFuncionVariable(String id,String tipo){
+    public void addFuncionVariable(String id,Tipos tipo){
         if(getFuncion(funcionActual).getVariable(id) == null){
-            TokenVariable temp = new TokenVariable(id,Tipos.valueOf(tipo));
+            TokenVariable temp = new TokenVariable(id,tipo);
             getFuncion(funcionActual).addVariable(temp);           
         } else {
             bitacora += "No es permitido que la función (" + funcionActual + ") "
                     + "tenga dos parametros/variables con el mismo nombre ("
                     + id +").\n";
             contErrores += 1;
-        }
-
-        
+        } 
     }
     
     /**
@@ -74,10 +73,12 @@ public class TablaSimbolos {
      * @param id identificador de la variable
      * @param tipo tipo de la variable
      */
-    public void addVariable(String id,String tipo){
+    public void addVariable(String id,Tipos tipo){
+        System.out.println("entro a addVariable");
+        System.out.println("Funcion actual:"+funcionActual);
         if(funcionActual.compareTo("main") == 0){
             if(getVariable(id) == null) {
-                TokenVariable temp = new TokenVariable(id,Tipos.valueOf(tipo));
+                TokenVariable temp = new TokenVariable(id,tipo);
                 variables.add(temp);
             } else {
                 bitacora += "La variable ("+ id + ") ya existe, no es permitido dos "
@@ -124,25 +125,25 @@ public class TablaSimbolos {
      * @param tipo tipo de la variable
      * @return true en caso de haber sido de declarada y del mismo tipo analisado
      */
-    public boolean verificarVariable(String id,String tipo){
+    public void verificarVariable(String id,Tipos tipo){
         if(funcionActual.compareTo("main") == 0){
             TokenVariable temp = getVariable(id);
             if(temp != null){
-                if(temp.getTipo() == Tipos.valueOf(tipo)){
-                    return true;
+                if(temp.getTipo() == tipo){
+                    guardarBitacora();
                 } else {
                     bitacora += "La variable (" + id + ") no es tipo (" + tipo 
                             + ").\n";
                     contErrores += 1;
-                    return false;
+                    guardarBitacora();
                 }
             } else {
                 bitacora += "La variable ("+ id + ") no ha sido declarada.\n"; 
                 contErrores += 1;
-                return false;
+                guardarBitacora();
             }
         } else {
-            return verificarFuncionVariable(id,tipo);
+            verificarFuncionVariable(id,tipo);
         }
     }
     
@@ -153,21 +154,21 @@ public class TablaSimbolos {
      * @param tipo tipo de la variable
      * @return true en caso de haber sido de declarada y del mismo tipo analisado
      */
-    public boolean verificarFuncion(String id,String tipo){
+    public void verificarFuncion(String id,Tipos tipo){
         TokenFuncion temp = getFuncion(id);
         if(temp != null){
-            if(temp.getTipo() == Tipos.valueOf(tipo)){
-                return true;
+            if(temp.getTipo() == tipo){
+                guardarBitacora();
             } else {
                 bitacora += "La funcion (" + id + ") no es tipo (" + tipo 
                         + ").\n";
                 contErrores += 1;
-                return false;
+                guardarBitacora();
             }
         } else {
             bitacora += "La funcion ("+ id + ") no ha sido declarada\n"; 
             contErrores += 1;
-            return false;
+            guardarBitacora();
         }
     }
     
@@ -179,20 +180,20 @@ public class TablaSimbolos {
         funcionActual = "main";
     }
     
-    public boolean verificarFuncionVariable(String id, String tipo){
+    public void verificarFuncionVariable(String id, Tipos tipo){
         TokenVariable temp = getFuncion(funcionActual).getVariable(id);
         if(temp != null){
-            if(temp.getTipo() == Tipos.valueOf(tipo)){
-                return true;
+            if(temp.getTipo() == tipo){
+                guardarBitacora();
             } else {
                 bitacora += "(" + id + ") no es de tipo (" + tipo + ").\n"; 
                 contErrores += 1;
-                return false;
+                guardarBitacora();
             }
         } else {
             bitacora += "(" + id + ") no ha sido declarado.\n";
             contErrores += 1;
-            return false;
+            guardarBitacora();
         }
     }
     

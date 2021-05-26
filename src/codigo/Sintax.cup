@@ -1,6 +1,12 @@
 package codigo;
 
 import java_cup.runtime.*;
+import codigo.Semantico.*;
+
+action code
+{:
+    public TablaSimbolos tabla = new TablaSimbolos();
+:}
 
 parser code
 {:
@@ -28,7 +34,7 @@ non terminal INICIO, DECLARACION, DECLARACION_FOR, IF, FOR_RETURN_ENTERA,
     VALBOOLCANTIDAD, VALBOOLIGUALDAD, VALBOOLLOGICO, DECLARACION_FLOTANTE,
     EXPRESION_FLOTANTE, VAR_FLOTANTE, VAR_ENTERA, DECLARACION_ENTERA, BREAK, 
     ASIGNACION_ENTERA, ASIGNACION_FLOTANTE, ASIGNACION_STRING, DECLARACION_STRING,
-    IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA, 
+    IFARIT_BOOL, IFARIT_FLOTANTE, IFARIT_ENTERA, IFARIT_CADENA, CADENA, MAIN, 
     DECLARACION_ARREGLO_FLOTANTE, DECLARACION_ARREGLO_ENTERA, ELSE, ASIGNACION_CHAR, 
     ARREGLO_FLOTANTE, ARREGLO_ENTERA, VARIABLES_ENTERAS, VARIABLES_FLOTANTES,
     VARIABLES_BOOLEANAS, ARREGLO_BOOL, DECLARACION_ARREGLO_BOOL, ASIGNACION_BOOL,
@@ -46,15 +52,18 @@ non terminal INICIO, DECLARACION, DECLARACION_FOR, IF, FOR_RETURN_ENTERA,
 start with INICIO;
 
 INICIO ::= 
-      Int Main Parentesis_a Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c
-    | Int Main Parentesis_a Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c FUNCIONES
+      MAIN
+    | FUNCIONES MAIN
+;
+
+MAIN ::=
+    Int Main Parentesis_a Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c {: tabla.guardarBitacora(); :}
 ;
 
 BREAK ::=
     Break P_coma
 ;
 
-//falta el for
 BLOQUE_RETURN_ENTERA_A ::= 
     BLOQUE_RETURN_ENTERA_A DECLARACION |
     DECLARACION |
@@ -130,7 +139,8 @@ VARIABLES ::=
     Identificador |
     Numero |
     Flotante |
-    CADENA
+    CADENA |
+    Caracter
 ;
 
 FUNCION_D ::= 
@@ -216,6 +226,7 @@ VARIABLES_BOOLEANAS ::=
 ;
 
 //identificador solitario no quiere agregarse, está en declaración boleana
+//valbooligualdad puede generar true == 3, hay que corregir
 SENTENCIA_BOOLEANA ::= 
     Op_booleano |
     IFARIT_BOOL |
@@ -240,7 +251,7 @@ VALBOOLIGUALDAD::=
 ;
 
 DECLARACION_FLOTANTE ::=
-    Float Identificador P_coma
+    Float Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
     | Float Identificador Igual EXPRESION_FLOTANTE P_coma
     | Float Identificador Igual Nulo P_coma
     | DECLARACION_ARREGLO_FLOTANTE 
@@ -276,13 +287,13 @@ EXPRESION_FLOTANTE ::=
 //Hay que revisar que VAR devuelvan un flotante con la tabla de simbolos
 //Falta Identificador 
 VAR_FLOTANTE ::=
-    Flotante:flotante {:System.out.println(flotante):}
+    Flotante
     | IFARIT_FLOTANTE 
     | Parentesis_a EXPRESION_FLOTANTE Parentesis_c 
 ;
 
 DECLARACION_ENTERA ::=
-      Int Identificador P_coma 
+      Int Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
     | Int Identificador Igual EXPRESION_ENTERA P_coma
     | Int Identificador Igual Nulo P_coma
     | DECLARACION_ARREGLO_ENTERA 
@@ -344,7 +355,7 @@ EXPRESION_ENTERA ::=
 //Hay que revisar que VAR devuelvan enteros con la tabla de simbolos
 // id++ exclusivo para identificadores 
 VAR_ENTERA ::= 
-      Identificador 
+      Identificador:id {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
     | FUNCION_E 
     | IFARIT_ENTERA
     | Numero
@@ -391,7 +402,7 @@ ASIGNACION_BOOL ::=
 
 ASIGNACION_ENTERA ::=
     Identificador Igual EXPRESION_ENTERA P_coma 
-    | Identificador Corchete_a Numero:numero Corchete_c Igual EXPRESION_ENTERA P_coma {:System.out.println(numero):}
+    | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_ENTERA P_coma 
     | Identificador Corchete_a Corchete_c Igual ARREGLO_ENTERA P_coma
 ;
 
