@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
  */
 public class TablaSimbolos {
     private ArrayList<TokenVariable> variables;
+    private ArrayList<TokenVariable> parametros;
     private ArrayList<TokenFuncion> funciones;
     private String funcionActual;
     private String bitacora;
@@ -24,8 +25,9 @@ public class TablaSimbolos {
     
     public TablaSimbolos() {
         variables = new ArrayList<TokenVariable>();
+        parametros = new ArrayList<TokenVariable>();
         funciones = new ArrayList<TokenFuncion>();
-        funcionActual = "main";
+        funcionActual = "";
         bitacora = "";
         contErrores = 0;
         guardarBitacora();
@@ -41,30 +43,34 @@ public class TablaSimbolos {
         if( getFuncion(id) == null) {
             funcionActual = id;
             TokenFuncion temp = new TokenFuncion(id,tipo);
-            funciones.add(temp);            
+            temp.addAllVariable(variables);
+            temp.addAllParametro(parametros);
+            funciones.add(temp);
+            variables.clear();
+            parametros.clear();
+            String revisionVarPar = temp.revisarParametros();
+            if(revisionVarPar.length() > 1){
+                bitacora += revisionVarPar;
+                contErrores += 1;
+            }
         } else {
             bitacora += "La funcion ("+ id + ") ya existe, no es permitido dos "
                     + "funciones con el mismo nombre.\n";   
             contErrores += 1;
         }
-
+        System.out.println(toString());
     }
     
-    /**
-     * Agrega un parametro a la funcion.
-     * @param id identificador de la funcion
-     * @param tipo tipo de retorno de la funcion
-     */
-    public void addFuncionVariable(String id,Tipos tipo){
-        if(getFuncion(funcionActual).getVariable(id) == null){
-            TokenVariable temp = new TokenVariable(id,tipo);
-            getFuncion(funcionActual).addVariable(temp);           
+    //ocupo revisar desde funcion si el parametro no choca con 
+    public void addParametro(String id, Tipos tipo){
+        if (getParametro(id) == null) {
+            TokenVariable temp = new TokenVariable(id, tipo);
+            parametros.add(temp);
         } else {
-            bitacora += "No es permitido que la función (" + funcionActual + ") "
-                    + "tenga dos parametros/variables con el mismo nombre ("
-                    + id +").\n";
+            bitacora += "(" + id + ") no puede ser el id de dos parametros.\n";
             contErrores += 1;
-        } 
+        }
+        System.out.println(toString());
     }
     
     /**
@@ -74,20 +80,15 @@ public class TablaSimbolos {
      * @param tipo tipo de la variable
      */
     public void addVariable(String id,Tipos tipo){
-        System.out.println("entro a addVariable");
-        System.out.println("Funcion actual:"+funcionActual);
-        if(funcionActual.compareTo("main") == 0){
-            if(getVariable(id) == null) {
-                TokenVariable temp = new TokenVariable(id,tipo);
-                variables.add(temp);
-            } else {
-                bitacora += "La variable ("+ id + ") ya existe, no es permitido dos "
-                        + "variables con el mismo nombre.\n";
-                contErrores += 1;
-            }
+        if (getVariable(id) == null) {
+            TokenVariable temp = new TokenVariable(id, tipo);
+            variables.add(temp);
         } else {
-            addFuncionVariable(id,tipo);
+            bitacora += "La variable (" + id + ") ya existe, no es permitido dos "
+                    + "variables con el mismo nombre.\n";
+            contErrores += 1;
         }
+        System.out.println(toString());
     }
     
     /**
@@ -113,6 +114,15 @@ public class TablaSimbolos {
         for(int i = 0; i < variables.size(); i++){
             if(variables.get(i).getId().compareTo(id) == 0){
                 return variables.get(i);
+            }
+        }
+        return null;
+    }
+    
+    public TokenVariable getParametro(String id) {
+        for(int i = 0; i < parametros.size(); i++){
+            if(parametros.get(i).getId().compareTo(id) == 0){
+                return parametros.get(i);
             }
         }
         return null;
@@ -178,6 +188,7 @@ public class TablaSimbolos {
      */
     public void setMain(){
         funcionActual = "main";
+        System.out.println("\nHe cambiado a main\n");
     }
     
     public void verificarFuncionVariable(String id, Tipos tipo){
@@ -199,7 +210,7 @@ public class TablaSimbolos {
     
     @Override
     public String toString() {
-        return "TablaSimbolos{" + "variables=\n" + variables.toString() + 
+        return "\nTablaSimbolos{\n" + "variables=\n" + variables.toString() + 
                 ",\n funciones=\n" + funciones.toString() + ",\n"
                 + "bitacora=\n" + bitacora + '}';
     }
@@ -221,7 +232,5 @@ public class TablaSimbolos {
             Logger.getLogger(TablaSimbolos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    
-    
+ 
 }

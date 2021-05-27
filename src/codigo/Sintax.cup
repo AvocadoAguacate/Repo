@@ -53,7 +53,7 @@ start with INICIO;
 
 INICIO ::= 
       MAIN
-    | FUNCIONES MAIN
+    | FUNCIONES MAIN 
 ;
 
 MAIN ::=
@@ -151,8 +151,8 @@ FUNCION_D ::=
 
 //falta revisar el return 
 FUNCION_DECLARACION_INT ::= 
-    Fun Parentesis_a Identificador Int Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c |
-    Fun Parentesis_a Identificador Int FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c 
+      Fun Parentesis_a Identificador:id Int Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c {: tabla.addFuncion(id.toString(),Tipos.Int); :}
+    | Fun Parentesis_a Identificador:id Int FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_RETURN_ENTERA Llave_c {: tabla.addFuncion(id.toString(),Tipos.Int); :}
 ;
 
 //falta revisar el return 
@@ -175,10 +175,10 @@ FUNCION_DECLARACION_VARIABLES ::=
 ;
 
 FUNCION_DECLARACION_VARIABLE ::=
-    Int Identificador |
-    Float Identificador |
-    Bool Identificador |
-    Cadena Identificador
+      Int Identificador:id {: tabla.addParametro(id.toString(),Tipos.Int); :}
+    | Float Identificador:id {: tabla.addParametro(id.toString(),Tipos.Float); :}
+    | Bool Identificador:id  {: tabla.addParametro(id.toString(),Tipos.Bool); :}
+    | Cadena Identificador:id {: tabla.addParametro(id.toString(),Tipos.String); :}
 ;
 
 RETURN_ENTERA ::=
@@ -197,7 +197,7 @@ RETURN_CARACTER ::=
 
 FUNCIONES ::=
     FUNCIONES FUNCION_D |
-    FUNCION_D
+    FUNCION_D {: tabla.setMain(); :}
 ;
 
 DECLARACION_BOOL ::=

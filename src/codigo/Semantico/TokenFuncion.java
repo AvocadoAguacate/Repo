@@ -14,6 +14,8 @@ public class TokenFuncion {
     // Lista de variables de la función
     private ArrayList<TokenVariable> variables;
     
+    private ArrayList<TokenVariable> parametros;
+    
     /**
      * Contructor de tokens de token funcion
      * @param id identificador en .cup 
@@ -23,6 +25,7 @@ public class TokenFuncion {
         this.id = id;
         this.tipo = tipo;
         variables = new ArrayList<TokenVariable>();
+        parametros = new ArrayList<TokenVariable>();
     }
     
     /**
@@ -31,6 +34,14 @@ public class TokenFuncion {
      */
     public void addVariable(TokenVariable token) {
         variables.add(token);
+    }
+    
+        /**
+     * Agrega una variable a los parametros de la función
+     * @param token variable 
+     */
+    public void addParametro(TokenVariable token) {
+        parametros.add(token);
     }
     
     /**
@@ -68,9 +79,31 @@ public class TokenFuncion {
         return null;
     }
     
+    public void addAllVariable(ArrayList<TokenVariable> lista){
+        variables.addAll(lista);
+    }
+    
+    public void addAllParametro(ArrayList<TokenVariable> lista){
+        parametros.addAll(lista);
+    }
+    
+    public String revisarParametros(){
+        String resultado = "";
+        for(int i = 0; i < parametros.size(); i++){
+            for(int j = 0; j < variables.size(); j++){
+                if(parametros.get(i).getId().compareTo(variables.get(j).getId()) == 0 ){
+                    return "(" + parametros.get(i).getId() + ") se encuentra "
+                            + "como parametro y variable";
+                }
+            }
+        }
+        return resultado;
+    }
+        
     @Override
     public String toString() {
         return "   {" + "id=" + id + ",\n    tipo=" + tipo + ",\n    variables=\n" 
-                + variables.toString() + "}\n";
+                + variables.toString() + ",\n" + "parametros=\n" 
+                + parametros.toString() + "}";
     }
 }
