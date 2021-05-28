@@ -19,6 +19,7 @@ public class TablaSimbolos {
     private ArrayList<TokenVariable> variables;
     private ArrayList<TokenVariable> parametros;
     private ArrayList<TokenFuncion> funciones;
+    private ArrayList<TokenArreglo> arreglos;
     private String funcionActual;
     private String bitacora;
     private int contErrores;
@@ -45,9 +46,11 @@ public class TablaSimbolos {
             TokenFuncion temp = new TokenFuncion(id,tipo);
             temp.addAllVariable(variables);
             temp.addAllParametro(parametros);
+            temp.addArreglos(arreglos);
             funciones.add(temp);
             variables.clear();
             parametros.clear();
+            arreglos.clear();
             String revisionVarPar = temp.revisarParametros();
             if(revisionVarPar.length() > 1){
                 bitacora += revisionVarPar;
@@ -59,6 +62,26 @@ public class TablaSimbolos {
             contErrores += 1;
         }
         System.out.println(toString());
+    }
+    
+    //limitar a arreglos con tamaño explicito
+    public void addArreglo(String id, Tipos tipo, int tamaño){
+        if( getArreglo(id) == null){
+            TokenArreglo temp = new TokenArreglo(id,tipo,tamaño);
+            arreglos.add(temp);
+        } else {
+            bitacora += "El arreglo ("+ id + ") ya existe, no es permitido dos "
+                    + "arreglos con el mismo nombre.\n";  
+        }
+    }
+    
+    public TokenArreglo getArreglo(String id){
+        for(int i = 0; i < arreglos.size(); i++){
+            if(arreglos.get(i).getId().compareTo(id) == 0){
+                return arreglos.get(i);
+            }
+        }
+        return null;
     }
     
     //ocupo revisar desde funcion si el parametro no choca con 

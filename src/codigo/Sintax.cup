@@ -131,8 +131,8 @@ BLOQUE_RETURN_CARACTER ::=
 ;
 
 FUNCION_E ::=
-    Fun Identificador Parentesis_a Parentesis_c |
-    Fun Identificador Parentesis_a VARIABLES Parentesis_c
+      Fun Identificador Parentesis_a Parentesis_c 
+    | Fun Identificador Parentesis_a VARIABLES Parentesis_c
 ;
 
 VARIABLES ::=
@@ -284,6 +284,7 @@ EXPRESION_FLOTANTE ::=
     VAR_FLOTANTE 
 ;
 
+//Identificador causa conflicto, ni idea porque
 //Hay que revisar que VAR devuelvan un flotante con la tabla de simbolos
 //Falta Identificador 
 VAR_FLOTANTE ::=
@@ -292,10 +293,11 @@ VAR_FLOTANTE ::=
     | Parentesis_a EXPRESION_FLOTANTE Parentesis_c 
 ;
 
+//Hay que revisar los arreglos
 DECLARACION_ENTERA ::=
       Int Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
-    | Int Identificador Igual EXPRESION_ENTERA P_coma
-    | Int Identificador Igual Nulo P_coma
+    | Int Identificador:id Igual EXPRESION_ENTERA P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
+    | Int Identificador:id Igual Nulo P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
     | DECLARACION_ARREGLO_ENTERA 
 ;
 
@@ -352,14 +354,15 @@ EXPRESION_ENTERA ::=
     VAR_ENTERA
 ;
 
-//Hay que revisar que VAR devuelvan enteros con la tabla de simbolos
+//Hay que revisar la cantidad de parametros
 // id++ exclusivo para identificadores 
 VAR_ENTERA ::= 
       Identificador:id {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
-    | FUNCION_E 
+    | Fun Identificador:id Parentesis_a Parentesis_c {: tabla.verificarFuncion(id.toString(),Tipos.Int); :}
+    | Fun Identificador:id Parentesis_a VARIABLES Parentesis_c  {: tabla.verificarFuncion(id.toString(),Tipos.Int); :}
     | IFARIT_ENTERA
     | Numero
-    | Identificador Op_incremento
+    | Identificador:id Op_incremento {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
 ;
 
 DECLARACION_STRING ::=

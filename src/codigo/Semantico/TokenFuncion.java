@@ -16,6 +16,8 @@ public class TokenFuncion {
     
     private ArrayList<TokenVariable> parametros;
     
+    private ArrayList<TokenArreglo> arreglos;
+    
     /**
      * Contructor de tokens de token funcion
      * @param id identificador en .cup 
@@ -42,6 +44,10 @@ public class TokenFuncion {
      */
     public void addParametro(TokenVariable token) {
         parametros.add(token);
+    }
+
+    public void addArreglos(ArrayList<TokenArreglo> arreglos) {
+        this.arreglos.addAll(arreglos);
     }
     
     /**
