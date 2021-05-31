@@ -226,7 +226,7 @@ VARIABLES_BOOLEANAS ::=
 ;
 
 //identificador solitario no quiere agregarse, está en declaración boleana
-//valbooligualdad puede generar true == 3, hay que corregir
+//valbooligualdad puede generar true == 3, se considera falso 
 SENTENCIA_BOOLEANA ::= 
     Op_booleano |
     IFARIT_BOOL |
@@ -241,7 +241,7 @@ SENTENCIA_BOOLEANA ::=
 ;
 VALBOOLCANTIDAD ::=
     Numero |
-    Identificador 
+    Identificador:id {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
 ;
 
 VALBOOLIGUALDAD::=
@@ -252,16 +252,14 @@ VALBOOLIGUALDAD::=
 
 DECLARACION_FLOTANTE ::=
     Float Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
-    | Float Identificador Igual EXPRESION_FLOTANTE P_coma
-    | Float Identificador Igual Nulo P_coma
+    | Float Identificador:id Igual EXPRESION_FLOTANTE P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
+    | Float Identificador:id Igual Nulo P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
     | DECLARACION_ARREGLO_FLOTANTE 
 ;
 
 DECLARACION_ARREGLO_FLOTANTE ::=
-      Float Identificador Corchete_a Corchete_c P_coma
-    | Float Identificador Corchete_a Numero Corchete_c P_coma
-    | Float Identificador Corchete_a Corchete_c Igual ARREGLO_FLOTANTE P_coma
-    | Float Identificador Corchete_a Numero Corchete_c Igual ARREGLO_FLOTANTE P_coma
+      Float Identificador:id Corchete_a Numero:num Corchete_c P_coma {: tabla.addArreglo(id.toString(),Tipos.Float,(int)num); :}
+    | Float Identificador:id Corchete_a Numero:num Corchete_c Igual ARREGLO_FLOTANTE P_coma {: tabla.addArreglo(id.toString(),Tipos.Float,(int)num); :}
 ;
 
 ARREGLO_FLOTANTE ::= 
@@ -285,7 +283,6 @@ EXPRESION_FLOTANTE ::=
 ;
 
 //Identificador causa conflicto, ni idea porque
-//Hay que revisar que VAR devuelvan un flotante con la tabla de simbolos
 //Falta Identificador 
 VAR_FLOTANTE ::=
     Flotante

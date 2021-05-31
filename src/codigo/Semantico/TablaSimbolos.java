@@ -242,6 +242,9 @@ public class TablaSimbolos {
         return bitacora;
     }
     
+    /**
+     * Guarda un json con la bitacora y la cantidad de errores detectados en esta clase.
+     */
     public void guardarBitacora(){
         JSONObject myJson = new JSONObject();
         myJson.put("Cantidad", contErrores);
