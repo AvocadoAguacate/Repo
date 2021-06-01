@@ -180,6 +180,35 @@ public class TablaSimbolos {
         }
     }
     
+    /**
+     * Revisa si la variable fue declarada y el tipo de variable si están en 
+     * main, sino revisa en las variables de la funcion actual
+     * @param id identificador de la variable
+     * @param tipo tipo de la variable
+     * @return true en caso de haber sido de declarada y del mismo tipo analisado
+     */
+    public void verificarArreglo(String id,Tipos tipo,int index){
+        if(funcionActual.compareTo("main") == 0){
+            TokenVariable temp = getVariable(id);
+            if(temp != null){
+                if(temp.getTipo() == tipo){
+                    guardarBitacora();
+                } else {
+                    bitacora += "La variable (" + id + ") no es tipo (" + tipo 
+                            + ").\n";
+                    contErrores += 1;
+                    guardarBitacora();
+                }
+            } else {
+                bitacora += "La variable ("+ id + ") no ha sido declarada.\n"; 
+                contErrores += 1;
+                guardarBitacora();
+            }
+        } else {
+            verificarFuncionArreglo(id,tipo,index);
+        }
+    }
+    
 
      /**
      * Revisa si la variable fue declarada y el tipo de variable
@@ -205,6 +234,22 @@ public class TablaSimbolos {
         }
     }
     
+         /**
+     * Revisa si la variable fue declarada 
+     * @param id identificador de la variable
+     * @return true en caso de haber sido de declarada 
+     */
+    public void verificarFuncion(String id){
+        TokenFuncion temp = getFuncion(id);
+        if(temp != null){
+            guardarBitacora();
+        } else {
+            bitacora += "La funcion ("+ id + ") no ha sido declarada\n"; 
+            contErrores += 1;
+            guardarBitacora();
+        }
+    }
+    
     /**
      * Sirve para dejar de verificar parametros, al indicar que la función es 
      * main el sistema debe verificar solo variables
@@ -219,6 +264,30 @@ public class TablaSimbolos {
         if(temp != null){
             if(temp.getTipo() == tipo){
                 guardarBitacora();
+            } else {
+                bitacora += "(" + id + ") no es de tipo (" + tipo + ").\n"; 
+                contErrores += 1;
+                guardarBitacora();
+            }
+        } else {
+            bitacora += "(" + id + ") no ha sido declarado.\n";
+            contErrores += 1;
+            guardarBitacora();
+        }
+    }
+    
+    public void verificarFuncionArreglo(String id, Tipos tipo, int index){
+        TokenArreglo temp = getFuncion(funcionActual).getArreglo(id);
+        if(temp != null){
+            if(temp.getTipo() == tipo){
+                if(index < temp.getTamaño()){
+                    guardarBitacora();
+                } else {
+                    bitacora += "(" + id + ") tiene un tamaño de (" + temp.getTamaño()
+                            + ") y se trata de guardar en el indice (" + index +
+                            ").\n";
+                    contErrores += 1;
+                }
             } else {
                 bitacora += "(" + id + ") no es de tipo (" + tipo + ").\n"; 
                 contErrores += 1;

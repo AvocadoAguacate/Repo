@@ -85,6 +85,15 @@ public class TokenFuncion {
         return null;
     }
     
+    public TokenArreglo getArreglo(String id) {
+        for(int i = 0; i < arreglos.size(); i++){
+            if(arreglos.get(i).getId().compareTo(id) == 0){
+                return arreglos.get(i);
+            }
+        }
+        return null;
+    }
+    
     public void addAllVariable(ArrayList<TokenVariable> lista){
         variables.addAll(lista);
     }
