@@ -16,23 +16,24 @@ public class GeneradorIntermedio {
     private ArrayList<Funcion> funciones;
     
     public GeneradorIntermedio(String sourceCode){
-        this.sourceCode = sourceCode.replaceAll("\t","").replace("\n", "");
+        this.sourceCode = sourceCode.replaceAll("\t","").replaceAll("\n", "");
+        String[] codigo = sourceCode.split("int main()");
         funciones = new ArrayList<Funcion>();
-        sacarMain();
+        sacarMain(codigo[1]);
         if(sourceCode.contains("fun")){
-            sacarFunciones();
+            sacarFunciones(codigo[0]);
         }
     }
     
-    private void sacarMain(){
-        String[] codigo = sourceCode.split("int main()");
-        Funcion main = new Funcion(codigo[1],"main");
+    private void sacarMain(String codigo){
+        int indexPrimerLlave = codigo.indexOf("{");
+        String sentencias = codigo.substring(indexPrimerLlave+2);
+        Funcion main = new Funcion(sentencias,"main");
         funciones.add(main);
-        sourceCode = codigo[0];
     }
     
-    private void sacarFunciones(){
-        String[] funciones = sourceCode.split("fun");
+    private void sacarFunciones(String codigo){
+        String[] funciones = codigo.split("fun");
         for(int i = 0; i < funciones.length; i++){
             if(funciones[i].length() > 0){
                 Funcion temp = new Funcion(funciones[i]);

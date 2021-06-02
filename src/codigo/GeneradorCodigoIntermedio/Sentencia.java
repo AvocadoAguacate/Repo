@@ -30,7 +30,11 @@ public class Sentencia {
 
     @Override
     public String toString() {
-        return "Sentencia{\n" + "sentencias=\n" + sentencias + "\n, tipo=\n" + tipo + "\n, sentencia=\n" + sentencia + '}';
+        if(sentencias == null){
+            return "\n{" + "tipo=" + tipo + "\n, sentencia=\n" + sentencia + '}';
+        } else {
+            return "\n{" + "sentencias=" + sentencias + "\n, tipo=" + tipo + "\n, parametros=\n" + sentencia + '}';
+        }
     }
     
     
