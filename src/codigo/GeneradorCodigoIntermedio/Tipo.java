@@ -12,6 +12,8 @@ package codigo.GeneradorCodigoIntermedio;
 public enum Tipo {
     For,
     If,
+    Elif,
+    Else,
     Asignacion,
     Declaracion
 }

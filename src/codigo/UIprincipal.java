@@ -5,6 +5,7 @@
  */
 package codigo;
 
+import codigo.GeneradorCodigoIntermedio.GeneradorIntermedio;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,6 +57,7 @@ public class UIprincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnGenerar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -121,6 +123,16 @@ public class UIprincipal extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(204, 204, 204));
         jLabel3.setText("Analisis sintáctico y semántico");
 
+        btnGenerar.setBackground(new java.awt.Color(153, 153, 153));
+        btnGenerar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnGenerar.setForeground(new java.awt.Color(102, 102, 102));
+        btnGenerar.setText("Generar");
+        btnGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,7 +160,9 @@ public class UIprincipal extends javax.swing.JFrame {
                         .addComponent(btnAnalizarLex)
                         .addGap(18, 18, 18)
                         .addComponent(btnLimpiarLex)
-                        .addGap(328, 328, 328)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnGenerar)
+                        .addGap(219, 219, 219)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -158,7 +172,8 @@ public class UIprincipal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiarLex)
                     .addComponent(btnAnalizarLex)
-                    .addComponent(btnArchivo))
+                    .addComponent(btnArchivo)
+                    .addComponent(btnGenerar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -393,6 +408,11 @@ public class UIprincipal extends javax.swing.JFrame {
         txtAnalizarSin.setText(null);
     }//GEN-LAST:event_btnLimpiarLexActionPerformed
 
+    private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+        GeneradorIntermedio generador = new GeneradorIntermedio(txtResultado.getText());
+        System.out.println(generador.toString());        
+    }//GEN-LAST:event_btnGenerarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -431,6 +451,7 @@ public class UIprincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnalizarLex;
     private javax.swing.JButton btnArchivo;
+    private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnLimpiarLex;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

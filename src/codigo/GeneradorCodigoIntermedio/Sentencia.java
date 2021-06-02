@@ -27,6 +27,11 @@ public class Sentencia {
         this.tipo = tipo;
         this.sentencia = sentencia;
     }
+
+    @Override
+    public String toString() {
+        return "Sentencia{\n" + "sentencias=\n" + sentencias + "\n, tipo=\n" + tipo + "\n, sentencia=\n" + sentencia + '}';
+    }
     
     
 }
