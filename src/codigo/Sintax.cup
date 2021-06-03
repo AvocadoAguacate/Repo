@@ -131,8 +131,8 @@ BLOQUE_RETURN_CARACTER ::=
 ;
 
 FUNCION_E ::=
-    Fun Identificador Parentesis_a Parentesis_c |
-    Fun Identificador Parentesis_a VARIABLES Parentesis_c
+      Fun Identificador:id Parentesis_a Parentesis_c {: tabla.verificarFuncion(id.toString()); :}
+    | Fun Identificador:id Parentesis_a VARIABLES Parentesis_c {: tabla.verificarFuncion(id.toString()); :}
 ;
 
 VARIABLES ::=
@@ -157,15 +157,15 @@ FUNCION_DECLARACION_INT ::=
 
 //falta revisar el return 
 FUNCION_DECLARACION_FLOAT ::= 
-    Fun Parentesis_a Identificador Float Parentesis_c Llave_a BLOQUE_RETURN_FLOTANTE Llave_c |
-    Fun Parentesis_a Identificador Float FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_RETURN_FLOTANTE Llave_c 
+      Fun Parentesis_a Identificador:id Float Parentesis_c Llave_a BLOQUE_RETURN_FLOTANTE Llave_c {: tabla.addFuncion(id.toString(),Tipos.Float); :}
+    | Fun Parentesis_a Identificador:id Float FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_RETURN_FLOTANTE Llave_c {: tabla.addFuncion(id.toString(),Tipos.Float); :}
 ;
 
 
 //falta revisar el return 
 FUNCION_DECLARACION_CHAR ::= 
-    Fun Parentesis_a Identificador Char Parentesis_c Llave_a BLOQUE_RETURN_CARACTER Llave_c |
-    Fun Parentesis_a Identificador Char FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_RETURN_CARACTER Llave_c 
+      Fun Parentesis_a Identificador:id Char Parentesis_c Llave_a BLOQUE_RETURN_CARACTER Llave_c {: tabla.addFuncion(id.toString(),Tipos.Char); :}
+    | Fun Parentesis_a Identificador:id Char FUNCION_DECLARACION_VARIABLES Parentesis_c Llave_a BLOQUE_RETURN_CARACTER Llave_c {: tabla.addFuncion(id.toString(),Tipos.Char); :}
 ;
 
 
@@ -252,8 +252,8 @@ VALBOOLIGUALDAD::=
 
 DECLARACION_FLOTANTE ::=
     Float Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
-    | Float Identificador Igual EXPRESION_FLOTANTE P_coma
-    | Float Identificador Igual Nulo P_coma
+    | Float Identificador:id Igual EXPRESION_FLOTANTE P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
+    | Float Identificador:id Igual Nulo P_coma {: tabla.addVariable(id.toString(),Tipos.Float); :}
     | DECLARACION_ARREGLO_FLOTANTE 
 ;
 
@@ -292,10 +292,11 @@ VAR_FLOTANTE ::=
     | Parentesis_a EXPRESION_FLOTANTE Parentesis_c 
 ;
 
+//Hay que revisar los arreglos
 DECLARACION_ENTERA ::=
       Int Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
-    | Int Identificador Igual EXPRESION_ENTERA P_coma
-    | Int Identificador Igual Nulo P_coma
+    | Int Identificador:id Igual EXPRESION_ENTERA P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
+    | Int Identificador:id Igual Nulo P_coma {: tabla.addVariable(id.toString(),Tipos.Int);:}
     | DECLARACION_ARREGLO_ENTERA 
 ;
 
@@ -316,8 +317,8 @@ VARIABLES_ENTERAS ::=
 ;
 
 DECLARACION_CHAR ::=
-      Char Identificador P_coma
-    | Char Identificador Igual Caracter P_coma
+      Char Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.Char); :}
+    | Char Identificador:id Igual Caracter P_coma {: tabla.addVariable(id.toString(),Tipos.Char); :}
     | DECLARACION_ARREGLO_CHAR
 ;
 
@@ -352,20 +353,21 @@ EXPRESION_ENTERA ::=
     VAR_ENTERA
 ;
 
-//Hay que revisar que VAR devuelvan enteros con la tabla de simbolos
+//Hay que revisar la cantidad de parametros
 // id++ exclusivo para identificadores 
 VAR_ENTERA ::= 
       Identificador:id {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
-    | FUNCION_E 
+    | Fun Identificador:id Parentesis_a Parentesis_c {: tabla.verificarFuncion(id.toString(),Tipos.Int); :}
+    | Fun Identificador:id Parentesis_a VARIABLES Parentesis_c  {: tabla.verificarFuncion(id.toString(),Tipos.Int); :}
     | IFARIT_ENTERA
     | Numero
-    | Identificador Op_incremento
+    | Identificador:id Op_incremento {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
 ;
 
 DECLARACION_STRING ::=
-    Cadena Identificador P_coma |
-    Cadena Identificador Igual CADENA P_coma |
-    Cadena Identificador Igual Nulo P_coma
+      Cadena Identificador:id P_coma {: tabla.addVariable(id.toString(),Tipos.String); :}
+    | Cadena Identificador:id Igual CADENA P_coma {: tabla.addVariable(id.toString(),Tipos.String); :}
+    | Cadena Identificador:id Igual Nulo P_coma {: tabla.addVariable(id.toString(),Tipos.String); :}
 ;
 
 CADENA ::=
@@ -401,26 +403,23 @@ ASIGNACION_BOOL ::=
 ;
 
 ASIGNACION_ENTERA ::=
-    Identificador Igual EXPRESION_ENTERA P_coma 
+    Identificador:id Igual EXPRESION_ENTERA P_coma {: tabla.verificarVariable(id.toString(),Tipos.Int); :}
     | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_ENTERA P_coma 
-    | Identificador Corchete_a Corchete_c Igual ARREGLO_ENTERA P_coma
 ;
 
 ASIGNACION_FLOTANTE ::=
-    Identificador Igual EXPRESION_FLOTANTE P_coma 
+    Identificador:id Igual EXPRESION_FLOTANTE P_coma {: tabla.verificarVariable(id.toString(),Tipos.Float); :}
     | Identificador Corchete_a Numero Corchete_c Igual EXPRESION_FLOTANTE P_coma 
-    | Identificador Corchete_a Corchete_c Igual ARREGLO_FLOTANTE P_coma
 ;
 
 ASIGNACION_STRING ::=
-    Identificador Igual CADENA P_coma |
-    Identificador Igual Read Parentesis_a Parentesis_c P_coma 
+      Identificador:id Igual CADENA P_coma {::} {: tabla.verificarVariable(id.toString(),Tipos.String); :}
+    | Identificador:id Igual Read Parentesis_a Parentesis_c P_coma {: tabla.verificarVariable(id.toString(),Tipos.String); :}
 ;
 
 ASIGNACION_CHAR ::=
-      Identificador Igual VAR_CHAR P_coma
-    | Identificador Corchete_a Numero Corchete_c Igual VAR_CHAR P_coma
-    | Identificador Corchete_a Corchete_c Igual ARREGLO_CHAR P_coma
+      Identificador:id Igual VAR_CHAR P_coma {: tabla.verificarVariable(id.toString(),Tipos.Char); :}
+    | Identificador Corchete_a Numero Corchete_c Igual VAR_CHAR P_coma 
 ;
 
 IFARIT_FLOTANTE ::= 
