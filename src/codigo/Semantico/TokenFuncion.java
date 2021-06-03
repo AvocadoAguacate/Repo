@@ -102,6 +102,10 @@ public class TokenFuncion {
         parametros.addAll(lista);
     }
     
+    /**
+     * Revisa si hay parametros con el mismo nombre de las variables
+     * @return resultado de la bitacora en caso de error sino "" 
+     */
     public String revisarParametros(){
         String resultado = "";
         for(int i = 0; i < parametros.size(); i++){

@@ -15,10 +15,13 @@ public class Sentencia {
     private ArrayList<Sentencia> sentencias;
     private Tipo tipo;
     private String sentencia;
+    ArrayList<String> pila;
+    
     
     public Sentencia(Tipo tipo,String sentencia) {
         this.tipo = tipo;
         this.sentencia = sentencia;
+        this.pila = new ArrayList<String>();
     }
 
     public Sentencia(ArrayList<Sentencia> sentencias, Tipo tipo, String sentencia) {
@@ -26,6 +29,7 @@ public class Sentencia {
         this.sentencias = sentencias;
         this.tipo = tipo;
         this.sentencia = sentencia;
+        this.pila = new ArrayList<String>();
     }
 
     @Override
@@ -36,6 +40,17 @@ public class Sentencia {
             return "\n{" + "sentencias=" + sentencias + "\n, tipo=" + tipo + "\n, parametros=\n" + sentencia + '}';
         }
     }
+    
+    public String generarCodigo3(){
+        String resultado = "";
+        String[] source = sentencia.split("=",2);
+        String identificador = source[0].replaceAll(" ", "").replaceAll("\n","").replaceAll("\t", "");
+        System.out.println("id:"+identificador);
+        String[] ops = source[1].split("[+] | [-]");
+ 
+        return resultado;
+    }
+    
     
     
 }

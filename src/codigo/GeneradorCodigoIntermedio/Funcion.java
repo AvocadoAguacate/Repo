@@ -58,7 +58,9 @@ public class Funcion {
             int contLlave = 0;
             int index = 0;
             if(prefijo.contains("for") || prefijo.contains("if")){
-                
+                int indexPrimerParentesis = aPartir.indexOf("(");
+                int indexSegundoParentesis = aPartir.indexOf(")");
+                String parametros = aPartir.substring(indexPrimerParentesis+1,indexSegundoParentesis);
                 do{
                     if(aPartir.charAt(index) == '{'){
                         contLlave += 1;
@@ -66,15 +68,10 @@ public class Funcion {
                     if (aPartir.charAt(index) == '}'){
                         contLlave -= 1;
                     }
-                    //System.out.println("C:"+aPartir.charAt(index)+" I:"+index);
+                    System.out.println("C:"+aPartir.charAt(index)+" I:"+index);
                     index += 1;
                 } while (contLlave > 0);
-                System.out.println("LllllllllllllPartir");
-                System.out.println(aPartir);
-                int indexPrimerParentesis = aPartir.indexOf("(");
-                int indexSegundoParentesis = aPartir.indexOf(")");
-                String parametros = aPartir.substring(indexPrimerParentesis+1,indexSegundoParentesis);
-                aPartir = aPartir.substring(indexSegundoParentesis+1);
+                aPartir = aPartir.substring(indexSegundoParentesis+1,index+1);
                 int indexPrimerLlave = aPartir.indexOf("{");
                 String nuevoApartir = aPartir.substring(indexPrimerLlave+1);
                 ArrayList<Sentencia> sentencias = new ArrayList<Sentencia>();

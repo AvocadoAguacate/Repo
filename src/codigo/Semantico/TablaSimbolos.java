@@ -64,7 +64,12 @@ public class TablaSimbolos {
         System.out.println(toString());
     }
     
-    //limitar a arreglos con tamaño explicito
+    /**
+     * Agrega un arreglo a la lista
+     * @param id id del arreglo
+     * @param tipo tipo del arreglo
+     * @param tamaño tamaño del arreglo
+     */
     public void addArreglo(String id, Tipos tipo, int tamaño){
         if( getArreglo(id) == null){
             TokenArreglo temp = new TokenArreglo(id,tipo,tamaño);
@@ -75,6 +80,11 @@ public class TablaSimbolos {
         }
     }
     
+    /**
+     * Obtiene un arreglo por id
+     * @param id id del arreglo buscado
+     * @return token del arreglo
+     */
     public TokenArreglo getArreglo(String id){
         for(int i = 0; i < arreglos.size(); i++){
             if(arreglos.get(i).getId().compareTo(id) == 0){
@@ -84,7 +94,11 @@ public class TablaSimbolos {
         return null;
     }
     
-    //ocupo revisar desde funcion si el parametro no choca con 
+    /**
+     * Un nuevo parametro para las funciones
+     * @param id id del parametro
+     * @param tipo tipo del parametro
+     */
     public void addParametro(String id, Tipos tipo){
         if (getParametro(id) == null) {
             TokenVariable temp = new TokenVariable(id, tipo);
@@ -142,6 +156,11 @@ public class TablaSimbolos {
         return null;
     }
     
+    /**
+     * Obtenera parametro 
+     * @param id id del parametro
+     * @return parametro
+     */
     public TokenVariable getParametro(String id) {
         for(int i = 0; i < parametros.size(); i++){
             if(parametros.get(i).getId().compareTo(id) == 0){
@@ -259,6 +278,11 @@ public class TablaSimbolos {
         System.out.println("\nHe cambiado a main\n");
     }
     
+    /**
+     * verica una variable dentro de una funcion
+     * @param id id de la variable
+     * @param tipo tipo de la variable
+     */
     public void verificarFuncionVariable(String id, Tipos tipo){
         TokenVariable temp = getFuncion(funcionActual).getVariable(id);
         if(temp != null){
@@ -276,6 +300,12 @@ public class TablaSimbolos {
         }
     }
     
+    /**
+     * verifica un arreglo dentro de una funcion
+     * @param id id edl arreglo
+     * @param tipo tipo del arreglo
+     * @param index indice 
+     */
     public void verificarFuncionArreglo(String id, Tipos tipo, int index){
         TokenArreglo temp = getFuncion(funcionActual).getArreglo(id);
         if(temp != null){
@@ -307,6 +337,10 @@ public class TablaSimbolos {
                 + "bitacora=\n" + bitacora + '}';
     }
     
+    /**
+     * toString() de bitacora
+     * @return 
+     */
     public String getBitacora() {
         return bitacora;
     }
