@@ -19,6 +19,7 @@ public class TablaSimbolos {
     private ArrayList<TokenVariable> variables;
     private ArrayList<TokenVariable> parametros;
     private ArrayList<TokenFuncion> funciones;
+    private ArrayList<TokenArreglo> arreglos;
     private String funcionActual;
     private String bitacora;
     private int contErrores;
@@ -45,9 +46,11 @@ public class TablaSimbolos {
             TokenFuncion temp = new TokenFuncion(id,tipo);
             temp.addAllVariable(variables);
             temp.addAllParametro(parametros);
+            temp.addArreglos(arreglos);
             funciones.add(temp);
             variables.clear();
             parametros.clear();
+            arreglos.clear();
             String revisionVarPar = temp.revisarParametros();
             if(revisionVarPar.length() > 1){
                 bitacora += revisionVarPar;
@@ -61,7 +64,41 @@ public class TablaSimbolos {
         System.out.println(toString());
     }
     
-    //ocupo revisar desde funcion si el parametro no choca con 
+    /**
+     * Agrega un arreglo a la lista
+     * @param id id del arreglo
+     * @param tipo tipo del arreglo
+     * @param tamaño tamaño del arreglo
+     */
+    public void addArreglo(String id, Tipos tipo, int tamaño){
+        if( getArreglo(id) == null){
+            TokenArreglo temp = new TokenArreglo(id,tipo,tamaño);
+            arreglos.add(temp);
+        } else {
+            bitacora += "El arreglo ("+ id + ") ya existe, no es permitido dos "
+                    + "arreglos con el mismo nombre.\n";  
+        }
+    }
+    
+    /**
+     * Obtiene un arreglo por id
+     * @param id id del arreglo buscado
+     * @return token del arreglo
+     */
+    public TokenArreglo getArreglo(String id){
+        for(int i = 0; i < arreglos.size(); i++){
+            if(arreglos.get(i).getId().compareTo(id) == 0){
+                return arreglos.get(i);
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Un nuevo parametro para las funciones
+     * @param id id del parametro
+     * @param tipo tipo del parametro
+     */
     public void addParametro(String id, Tipos tipo){
         if (getParametro(id) == null) {
             TokenVariable temp = new TokenVariable(id, tipo);
@@ -119,6 +156,11 @@ public class TablaSimbolos {
         return null;
     }
     
+    /**
+     * Obtenera parametro 
+     * @param id id del parametro
+     * @return parametro
+     */
     public TokenVariable getParametro(String id) {
         for(int i = 0; i < parametros.size(); i++){
             if(parametros.get(i).getId().compareTo(id) == 0){
@@ -157,6 +199,35 @@ public class TablaSimbolos {
         }
     }
     
+    /**
+     * Revisa si la variable fue declarada y el tipo de variable si están en 
+     * main, sino revisa en las variables de la funcion actual
+     * @param id identificador de la variable
+     * @param tipo tipo de la variable
+     * @return true en caso de haber sido de declarada y del mismo tipo analisado
+     */
+    public void verificarArreglo(String id,Tipos tipo,int index){
+        if(funcionActual.compareTo("main") == 0){
+            TokenVariable temp = getVariable(id);
+            if(temp != null){
+                if(temp.getTipo() == tipo){
+                    guardarBitacora();
+                } else {
+                    bitacora += "La variable (" + id + ") no es tipo (" + tipo 
+                            + ").\n";
+                    contErrores += 1;
+                    guardarBitacora();
+                }
+            } else {
+                bitacora += "La variable ("+ id + ") no ha sido declarada.\n"; 
+                contErrores += 1;
+                guardarBitacora();
+            }
+        } else {
+            verificarFuncionArreglo(id,tipo,index);
+        }
+    }
+    
 
      /**
      * Revisa si la variable fue declarada y el tipo de variable
@@ -182,6 +253,22 @@ public class TablaSimbolos {
         }
     }
     
+         /**
+     * Revisa si la variable fue declarada 
+     * @param id identificador de la variable
+     * @return true en caso de haber sido de declarada 
+     */
+    public void verificarFuncion(String id){
+        TokenFuncion temp = getFuncion(id);
+        if(temp != null){
+            guardarBitacora();
+        } else {
+            bitacora += "La funcion ("+ id + ") no ha sido declarada\n"; 
+            contErrores += 1;
+            guardarBitacora();
+        }
+    }
+    
     /**
      * Sirve para dejar de verificar parametros, al indicar que la función es 
      * main el sistema debe verificar solo variables
@@ -191,11 +278,46 @@ public class TablaSimbolos {
         System.out.println("\nHe cambiado a main\n");
     }
     
+    /**
+     * verica una variable dentro de una funcion
+     * @param id id de la variable
+     * @param tipo tipo de la variable
+     */
     public void verificarFuncionVariable(String id, Tipos tipo){
         TokenVariable temp = getFuncion(funcionActual).getVariable(id);
         if(temp != null){
             if(temp.getTipo() == tipo){
                 guardarBitacora();
+            } else {
+                bitacora += "(" + id + ") no es de tipo (" + tipo + ").\n"; 
+                contErrores += 1;
+                guardarBitacora();
+            }
+        } else {
+            bitacora += "(" + id + ") no ha sido declarado.\n";
+            contErrores += 1;
+            guardarBitacora();
+        }
+    }
+    
+    /**
+     * verifica un arreglo dentro de una funcion
+     * @param id id edl arreglo
+     * @param tipo tipo del arreglo
+     * @param index indice 
+     */
+    public void verificarFuncionArreglo(String id, Tipos tipo, int index){
+        TokenArreglo temp = getFuncion(funcionActual).getArreglo(id);
+        if(temp != null){
+            if(temp.getTipo() == tipo){
+                if(index < temp.getTamaño()){
+                    guardarBitacora();
+                } else {
+                    bitacora += "(" + id + ") tiene un tamaño de (" + temp.getTamaño()
+                            + ") y se trata de guardar en el indice (" + index +
+                            ").\n";
+                    contErrores += 1;
+                }
             } else {
                 bitacora += "(" + id + ") no es de tipo (" + tipo + ").\n"; 
                 contErrores += 1;
@@ -215,10 +337,17 @@ public class TablaSimbolos {
                 + "bitacora=\n" + bitacora + '}';
     }
     
+    /**
+     * toString() de bitacora
+     * @return 
+     */
     public String getBitacora() {
         return bitacora;
     }
     
+    /**
+     * Guarda un json con la bitacora y la cantidad de errores detectados en esta clase.
+     */
     public void guardarBitacora(){
         JSONObject myJson = new JSONObject();
         myJson.put("Cantidad", contErrores);

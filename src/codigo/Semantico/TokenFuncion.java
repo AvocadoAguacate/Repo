@@ -16,6 +16,8 @@ public class TokenFuncion {
     
     private ArrayList<TokenVariable> parametros;
     
+    private ArrayList<TokenArreglo> arreglos;
+    
     /**
      * Contructor de tokens de token funcion
      * @param id identificador en .cup 
@@ -42,6 +44,10 @@ public class TokenFuncion {
      */
     public void addParametro(TokenVariable token) {
         parametros.add(token);
+    }
+
+    public void addArreglos(ArrayList<TokenArreglo> arreglos) {
+        this.arreglos.addAll(arreglos);
     }
     
     /**
@@ -79,6 +85,15 @@ public class TokenFuncion {
         return null;
     }
     
+    public TokenArreglo getArreglo(String id) {
+        for(int i = 0; i < arreglos.size(); i++){
+            if(arreglos.get(i).getId().compareTo(id) == 0){
+                return arreglos.get(i);
+            }
+        }
+        return null;
+    }
+    
     public void addAllVariable(ArrayList<TokenVariable> lista){
         variables.addAll(lista);
     }
@@ -87,6 +102,10 @@ public class TokenFuncion {
         parametros.addAll(lista);
     }
     
+    /**
+     * Revisa si hay parametros con el mismo nombre de las variables
+     * @return resultado de la bitacora en caso de error sino "" 
+     */
     public String revisarParametros(){
         String resultado = "";
         for(int i = 0; i < parametros.size(); i++){
